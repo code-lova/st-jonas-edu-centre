@@ -22,6 +22,7 @@ class User extends Authenticatable
         'middlename',
         'lastname',
         'username',
+        'password',
         'role',
         'sex',
         'date_of_birth',
@@ -58,4 +59,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function healthInfo(){
+        return $this->hasOne(Healthinfo::class, 'user_id', 'id');
+    }
+
+    public function parentInfo(){
+        return $this->hasOne(ParentInfo::class, 'user_id', 'id');
+    }
 }

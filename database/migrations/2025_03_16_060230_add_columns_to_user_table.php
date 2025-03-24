@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('role', ['admin', 'teacher', 'student'])->default('student')->after('username');
             $table->string('sex')->after('password');
             $table->string('date_of_birth')->after('sex');
-            $table->string('passport')->after('date_of_birth');
+            $table->string('passport')->after('date_of_birth')->nullable();
             $table->string('place_of_birth')->after('passport');
             $table->string('blood_group')->after('place_of_birth');
             $table->string('genotype')->after('blood_group');

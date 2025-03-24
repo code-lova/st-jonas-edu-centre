@@ -16,9 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->string('parent_name');
             $table->string('parent_address');
-            $table->string('occupation');
+            $table->string('occupation')->nullable();
             $table->string('fathers_phone');
-            $table->string('mothers_phone');
+            $table->string('mothers_phone')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

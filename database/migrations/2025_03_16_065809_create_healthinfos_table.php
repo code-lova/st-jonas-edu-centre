@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('healthinfos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->enum('abnormal_behaviour', ['Yes', 'No'])->default('No');
+            $table->tinyInteger('abnormal_behaviour')->default('0');
             $table->longText('description')->nullable()->comment('if the child have abnormal behaviour');
             $table->longText('child_general_health_condition')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

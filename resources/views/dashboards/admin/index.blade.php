@@ -24,7 +24,7 @@ website name --}}
             <div class="text-start px-2 py-5">
               <div class="fs-6 d-flex">
                 Welcome Admin
-                     <div class="px-1 fw-semibold">Kunle</div>
+                     <div class="px-1 fw-semibold">{{ $user->lastname }}</div>
               </div>
               <div class="fs-7">
                 Hope you are having a great time

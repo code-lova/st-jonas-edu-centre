@@ -27,6 +27,7 @@ Route::get('/clear', function() {
     Artisan::call('cache:clear');
     Artisan::call('config:cache');
     Artisan::call('view:clear');
+    Artisan::call('route:clear');
     return "Cleared!";
 });
 
@@ -57,7 +58,13 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function (){
     Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index']);
 
     Route::controller(\App\Http\Controllers\Admin\StudentController::class)->group(function() {
-        Route::get('/register-student', 'registerNewStudent')->name('newstudent');
+        Route::get('/student-list', 'index')->name('studentlist');
+        Route::get('/register-student', 'create')->name('newstudent');
+        Route::post('/register-student', 'store')->name('students.store');
+        Route::get('/student-detail/{id}', 'edit')->name('viewstudent');
+        Route::get('/update-student/{id}', 'update')->name('updatestudent');
+
+
     });
 
 
