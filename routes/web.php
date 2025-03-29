@@ -63,9 +63,31 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function (){
         Route::post('/register-student', 'store')->name('students.store');
         Route::get('/student-detail/{id}', 'edit')->name('viewstudent');
         Route::get('/update-student/{id}', 'update')->name('updatestudent');
+        Route::put('/update-student/{id}', 'updateStudent');
+    });
+
+    Route::controller(\App\Http\Controllers\Admin\StaffController::class)->group(function (){
+        Route::get('/register-staff', 'create')->name('newstaff');
+        Route::post('/register-staff', 'store')->name('staff.store');
 
 
     });
+
+    Route::controller(\App\Http\Controllers\Admin\ClassesController::class)->group(function() {
+        Route::get('/class', 'index')->name('classlist');
+        Route::post('/class', 'store')->name('create.class');
+        Route::put('/class/update/{id}', 'update')->name('update.class');
+        Route::delete('/class/delete/{id}', 'destroy');
+    });
+
+    Route::controller(\App\Http\Controllers\Admin\SubjectController::class)->group(function() {
+        Route::get('/subject', 'index')->name('subjectlist');
+        Route::post('/subject', 'store')->name('create.subject');
+        Route::put('/subject/update/{id}', 'update')->name('update.subject');
+        Route::delete('/subject/delete/{id}', 'destroy');
+    });
+
+
 
 
 });

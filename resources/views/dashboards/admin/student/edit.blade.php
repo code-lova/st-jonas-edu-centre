@@ -23,6 +23,13 @@ website name --}}
             <div class="d-grid gap-4">
                 <ul class="list-group list-group-flush text-start">
                     <li class="list-group-item">
+                        @if ($user->passport == Null)
+                            <img width="100" height="100" style="border-radius: 5px" src="{{ asset('assets/images/avatar.png') }}" alt="{{ $user->firstname }}">
+                        @else
+                            <img width="230" height="200" style="border-radius: 5px" src="{{ asset('uploads/'.$user->passport) }}" alt="{{ $user->firstname }}">
+                        @endif
+                    </li>
+                    <li class="list-group-item">
                         <div class="row">
                             <div class="text-blue text-blue fs-7 col-4 col-md-4"><span class="px-2">Name:</span>
                             </div>
