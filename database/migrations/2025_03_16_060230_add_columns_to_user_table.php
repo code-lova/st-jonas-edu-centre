@@ -31,9 +31,6 @@ return new class extends Migration
             $table->unsignedBigInteger('current_class_applying')->after('last_class_passed')->nullable();
             $table->string('class_teacher')->after('current_class_applying')->nullable()->comment('only for teachers');
             $table->enum('is_active', ['0', '1'])->default(1)->after('class_teacher');
-
-            $table->foreign('last_class_passed')->references('id')->on('classes');
-            $table->foreign('current_class_applying')->references('id')->on('classes');
         });
     }
 
