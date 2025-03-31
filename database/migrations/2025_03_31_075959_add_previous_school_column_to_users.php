@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('subjects', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('class_id');
-            $table->string('subject_name');
-            $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade');
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('previous_school')->after('nationality')->nullable();
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('subjects');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('previous_school');
+        });
     }
 };

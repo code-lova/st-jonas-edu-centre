@@ -6,7 +6,39 @@ website name --}}
 
 
 @section('content')
+    <style>
 
+        select {
+            border: 1px solid #15151558;
+        }
+        option{
+            padding: .2rem;
+            color: #151515c1;
+        }
+
+        .form-check-input {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #650018;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .form-check-input:checked {
+            background-color: #650018;
+            border-color: #650018;
+        }
+
+        .form-check-input:disabled {
+            background-color: #ccc;
+            border-color: #999;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+    </style>
 
 <section class="main p-0 col-12  text-red col-md-9  text-center">
     <div class="main-body overflow-auto vh-100">
@@ -57,13 +89,15 @@ website name --}}
                         <div class="fs-7 pe-5" >Sex</div>
                         <div class="d-flex gap-5 py-1">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="sex" id="sex-male" value="Male">
+                                <input class="form-check-input" type="radio" name="sex" id="sex-male" value="Male"
+                                {{ old('sex') == 'Male' ? 'checked' : '' }}>
                                 <label class="form-check-label fs-9" for="sex-male">
                                     Male
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="sex" id="sex-female" value="Female" checked>
+                                <input class="form-check-input" type="radio" name="sex" id="sex-female" value="Female"
+                                {{ old('sex', 'Female') == 'Female' ? 'checked' : '' }}>
                                 <label class="form-check-label fs-9" for="sex-female">
                                     Female
                                 </label>
@@ -156,12 +190,25 @@ website name --}}
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
+                     <!-- Previous School  -->
+                    <div class="my-1 col-12 col-md-4 text-start">
+                        <label for="previousSchool" class="text-capitalize fs-9 form-label">Previous School Attended</label>
+                        <input type="text" id="previousSchool" name="previous_school"  value="{{ old('previous_school') }}" placeholder="Leave blank or N/A if none"
+                            class="form-control form-control-sm @error('previous_school') is-invalid @enderror" required/>
+                        @error('previous_school')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
                     <!-- last class passed  -->
                     <div class="my-1 col-12 col-md-4 text-start">
                         <label for="LastClassPassed" class="text-capitalize fs-9 form-label">Last Class
                             Passed</label>
-                        <input type="text" id="LastClassPassed" name="last_class_passed"  value="{{ old('last_class_passed') }}" placeholder="Last Class Passed"
-                            class="form-control form-control-sm @error('last_class_passed') is-invalid @enderror" required/>
+                        <select name="last_class_passed"  value="{{ old('last_class_passed') }}" id="LastClassPassed" class="form-control form-control-sm @error('last_class_passed') is-invalid @enderror" required="">
+                            <option value="">Select previous class</option>
+                            @foreach ( $classes as $val)
+                                <option value="{{ $val->id }}">{{ $val->class_name }}</option>
+                            @endforeach
+                        </select>
                         @error('last_class_passed')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -170,30 +217,28 @@ website name --}}
                     <div class="my-1 col-12 col-md-4 text-start">
                         <label for="ClassCurrentlyApplyingFor" class="text-capitalize fs-9 form-label">Class Currently Applying For</label>
                         <select name="current_class_applying"  value="{{ old('current_class_applying') }}" id="ClassCurrentlyApplyingFor" class="form-control form-control-sm @error('current_class_applying') is-invalid @enderror" required="">
-                            <option value="">Select a class</option>
-                            <option value="SS 1">
-                                SS 1
-                            </option>
-                            <option value="SS 2">
-                                SS 2
-                            </option>
-                            <option value="Jss 3">
-                                JSS 3
-                            </option>
-
+                            <option value="">Select a current class</option>
+                            @foreach ( $classes as $val)
+                                <option value="{{ $val->id }}">{{ $val->class_name }}</option>
+                            @endforeach
                         </select>
+                        @error('current_class_applying')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
                     <h3 class="fs-6 pt-5 fw-bold">Health Information</h3>
                     <div class="my-1 col-12 d-flex gap-4 text-start">
                         <div class="fs-7 pe-5" >Do your ward behave abnormal at times
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="abnormal_behaviour" id="yesabnormal" value="Yes">
+                            <input class="form-check-input" type="radio" name="abnormal_behaviour" id="yesabnormal" value="Yes"
+                            {{ old('abnormal_behaviour') == 'Yes' ? 'checked' : '' }}>
                             <label class="form-check-label fs-9" for="yesabnormal">Yes</label>
                         </div>
 
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="abnormal_behaviour" id="noabnormal" value="No" checked>
+                            <input class="form-check-input" type="radio" name="abnormal_behaviour" id="noabnormal" value="No"
+                            {{ old('abnormal_behaviour') == 'No' ? 'checked' : '' }}>
                             <label class="form-check-label fs-9" for="noabnormal">No</label>
                         </div>
                     </div>

@@ -34,6 +34,7 @@ class User extends Authenticatable
         'local_govt_origin',
         'religion',
         'nationality',
+        'previous_school',
         'last_class_passed',
         'current_class_applying',
         'class_teacher',
@@ -67,4 +68,21 @@ class User extends Authenticatable
     public function parentInfo(){
         return $this->hasOne(ParentInfo::class, 'user_id', 'id');
     }
+
+    public function subjects(){
+        return $this->belongsToMany(Subject::class, 'teacher_subjects', 'user_id', 'subject_id');
+    }
+
+    public function class(){
+        return $this->belongsTo(Classes::class,'class_teacher', 'id');
+    }
+
+    public function currentClassApplying(){
+        return $this->belongsTo(Classes::class, 'current_class_applying', 'id');
+    }
+
+    public function lastClassPassed(){
+        return $this->belongsTo(Classes::class, 'last_class_passed', 'id');
+    }
+
 }

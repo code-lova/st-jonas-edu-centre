@@ -67,9 +67,13 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function (){
     });
 
     Route::controller(\App\Http\Controllers\Admin\StaffController::class)->group(function (){
+        Route::get('/staff-list', 'index')->name('staff.list');
         Route::get('/register-staff', 'create')->name('newstaff');
         Route::post('/register-staff', 'store')->name('staff.store');
-
+        Route::get('/staff-detail/{id}', 'edit')->name('view.staff');
+        Route::get('/update-staff/{id}', 'update')->name('update.staff');
+        Route::put('/update-staff/{id}', 'updateStaff');
+        Route::delete('/delete-staff/{id}', 'destroy')->name('staff.delete');
 
     });
 

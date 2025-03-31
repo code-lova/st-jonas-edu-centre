@@ -39,9 +39,11 @@ class StoreStudentRequest extends FormRequest
             'local_govt_origin' => 'nullable|string|max:255',
             'religion' => 'nullable|string|max:255',
             'nationality' => 'required|string|max:255',
-            'last_class_passed' => 'required|string|max:255',
-            'current_class_applying' => 'required|string|max:255',
+            'previous_school' => 'nullable|string|max:255',
+            'last_class_passed' => 'nullable|integer|exists:classes,id',
+            'current_class_applying' => 'nullable|integer|exists:classes,id',
             'class_teacher' => 'nullable|string|max:255',
+
 
             // Health Information
             'abnormal_behaviour' => 'required|in:Yes,No',

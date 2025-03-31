@@ -108,7 +108,50 @@
         }
                 toastr.warning("{{ session('warning') }}");
         @endif
+
+        //This secipt is for filtering or sorting tables
+        $(window).load(function () {
+            $(".preloader").delay(400).fadeOut("slow");
+            $("#overlayer").delay(400).fadeOut("slow");
+        });
+        function myFunction() {
+            // Declare variables
+            let input, filter, table, tr, td, tdl, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                tdl = tr[i].getElementsByTagName("td")[1];
+                tdsubject = tr[i].getElementsByTagName("td")[2];
+                tdclasses = tr[i].getElementsByTagName("td")[3];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    tdlValue = tdl.textContent || tdl.innerText;
+                    tdsubjectValue = tdsubject.textContent || tdsubject.innerText;
+                    tdclassesValue = tdclasses.textContent || tdclasses.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else if (tdlValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else if (tdclassesValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else if (tdsubjectValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    }
+                    else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
     </script>
+
 
 </body>
 </html>

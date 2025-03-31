@@ -18,7 +18,7 @@ website name --}}
                             d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
                     </svg>
                 </div>
-                <div class="fs-6 fw-bold text-red align-self-center ">Students List</div>
+                <div class="fs-6 fw-bold text-red align-self-center ">{{ $title }}</div>
             </div>
             <div class="my-1 col-12 col-md-4 text-start">
                 <input type="text" id="myInput" id="middlename" placeholder="Search for names.."
@@ -29,28 +29,43 @@ website name --}}
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">First</th>
+                        <th scope="col">Middle</th>
                         <th scope="col">Last</th>
-                        <th scope="col">Gender</th>
-                        <th scope="col">Class</th>
+                        <th scope="col">Class Teacher</th>
+                        <th scope="col">Subject/Classes</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($students as $k=>$val)
+                    @foreach ($staffs as $k=>$val)
 
                     <tr>
                         <th scope="row">{{ ++$k }}</th>
                         <td>{{ $val->firstname }}</td>
+                        <td>{{ $val->middlename ?? 'N/A' }}</td>
                         <td>{{ $val->lastname }}</td>
-                        <td>{{ $val->sex }}</td>
-                        <td>{{ $val->currentClassApplying->class_name }}</td>
+                        <td>{{ $val->class->class_name ?? 'N/A' }}</td>
                         <td>
-                            <a href="{{ url('admin/student-detail/'.$val->id) }}" class="btn btn-sm btn-info">View</a>
-                            <!-- Add this before the Edit/Update Student button -->
-                            <a href="" class="btn btn-sm btn-secondary">View Results</a>
-                            <form action="" method="POST" style="display:inline;">
-                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            @php
+                                $groupedSubjects = [];
+                                foreach ($val->subjects as $subject) {
+                                    $groupedSubjects[$subject->subject_name][] = $subject->class->class_name ?? 'N/A';
+                                }
+                            @endphp
+                            @foreach ($groupedSubjects as $subjectName => $classes)
+                                {{ $subjectName }} ({{ implode(', ', $classes) }})@if(!$loop->last), @endif
+                            @endforeach
+                        </td>
+                        <td>
+                            <a href="{{ url('admin/staff-detail/'.$val->id) }}" class="btn btn-sm btn-info">View</a>
+
+                            <button onclick="confirmDelete({{ $val->id }})" class="btn btn-sm btn-danger">Delete</button>
+
+                            <form id="delete-form-{{ $val->id }}" action="{{ route('staff.delete', $val->id) }}" method="POST" style="display: none;">
+                                @csrf
+                                @method('DELETE')
                             </form>
+
                         </td>
                     </tr>
                     @endforeach
@@ -61,3 +76,11 @@ website name --}}
     </section>
 
 @endsection
+
+<script>
+    function confirmDelete(staffId) {
+        if (confirm("Are you sure you want to delete this staff? This action cannot be undone!")) {
+            document.getElementById('delete-form-' + staffId).submit();
+        }
+    }
+</script>

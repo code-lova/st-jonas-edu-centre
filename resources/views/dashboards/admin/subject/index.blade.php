@@ -128,6 +128,22 @@ website name --}}
         .modal-content button:hover {
             background: #650018;
         }
+
+        .pagination .page-item .page-link {
+            background-color: #650018 !important;
+            color: white !important;
+            border-color: #650018 !important;
+        }
+
+        .pagination .page-item .page-link:hover {
+            background-color: #fff !important;
+            border-color: darkred !important;
+            color: #650018 !important;
+        }
+
+        .hide-pagination {
+            display: none;
+        }
     </style>
 
      <!-- this is the end of the mobile view -->
@@ -183,7 +199,14 @@ website name --}}
                    @endforelse
 
                 </tbody>
+
             </table>
+             <!-- Pagination -->
+                <ul class="pagination justify-content-center mt-4 mb-4">
+                    {{ $subject->links() }}
+                </ul>
+            <!-- Paginations end -->
+
 
             <!-- Create subject Modal -->
             <div id="createModal" class="class-modal">
@@ -243,6 +266,7 @@ website name --}}
         const createBtn = document.getElementById("create-sc");
         const editBtns = document.querySelectorAll(".edit-sc");
         const deleteBtns = document.querySelectorAll(".delete-sc");
+        const pagination = document.querySelector(".pagination");
 
         // Get close buttons
         const closeCreateModal = document.getElementById("closeCreateModal");
@@ -257,6 +281,7 @@ website name --}}
         // Open create modal
         createBtn.addEventListener("click", function () {
             createModal.style.display = "block";
+            pagination.classList.add("hide-pagination");
         });
 
         // Open edit modal
@@ -265,6 +290,8 @@ website name --}}
                 selectedSubjectId = this.getAttribute("data-id");
                 const subjectName = this.getAttribute("data-name");
                 const classId = this.getAttribute("data-class-id");
+                pagination.classList.add("hide-pagination");
+
 
                 editNameInput.value = subjectName;
                 // Set the correct class in the dropdown
@@ -328,19 +355,25 @@ website name --}}
         // Close modals
         closeCreateModal.addEventListener("click", function () {
             createModal.style.display = "none";
+            pagination.classList.remove("hide-pagination");
         });
 
         closeEditModal.addEventListener("click", function () {
             editModal.style.display = "none";
+            pagination.classList.remove("hide-pagination");
         });
 
         // Close modal when clicking outside
         window.addEventListener("click", function (event) {
             if (event.target === createModal) {
                 createModal.style.display = "none";
+                pagination.classList.remove("hide-pagination");
+
             }
             if (event.target === editModal) {
                 editModal.style.display = "none";
+                pagination.classList.remove("hide-pagination");
+
             }
         });
     });

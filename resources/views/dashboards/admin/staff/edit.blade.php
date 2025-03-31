@@ -22,13 +22,7 @@ website name --}}
             </div>
             <div class="d-grid gap-4">
                 <ul class="list-group list-group-flush text-start">
-                    <li class="list-group-item">
-                        @if ($user->passport == Null)
-                            <img width="100" height="100" style="border-radius: 5px" src="{{ asset('assets/images/avatar.png') }}" alt="{{ $user->firstname }}">
-                        @else
-                            <img width="230" height="200" style="border-radius: 5px" src="{{ asset('uploads/'.$user->passport) }}" alt="{{ $user->firstname }}">
-                        @endif
-                    </li>
+
                     <li class="list-group-item">
                         <div class="row">
                             <div class="text-blue text-blue fs-7 col-4 col-md-4"><span class="px-2">Name:</span>
@@ -54,7 +48,7 @@ website name --}}
                                 <span class="px-2">Date of Birth:</span>
                             </div>
                             <div class="col-8 fs-7 col-md-8">
-                                <span id="DateOfBirth" class="text-capitalize text-blue"> {{date("Y/m/d", $user->date_of_birtt)}}</span>
+                                <span id="DateOfBirth" class="text-capitalize text-blue"> {{ \Carbon\Carbon::parse($user->date_of_birth)->format('jS F, Y') }}</span>
                             </div>
                         </div>
                     </li>
@@ -128,53 +122,22 @@ website name --}}
                             </div>
                         </div>
                     </li>
+
                     <li class="list-group-item">
                         <div class="row">
                             <div class="text-blue fs-7 col-4 col-md-4">
-                                <span class="px-2">Previous School:</span>
+                                <span class="px-2">Subjects:</span>
                             </div>
                             <div class="col-8 fs-7 col-md-8">
-                                <span id="previousSchool" class="text-capitalize text-blue">{{ $user->previous_school ?? 'N/A' }}</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="text-blue fs-7 col-4 col-md-4">
-                                <span class="px-2">Last Class Passed:</span>
-                            </div>
-                            <div class="col-8 fs-7 col-md-8">
-                                <span id="lastclasspassed" class="text-capitalize text-blue">{{ $user->lastClassPassed->class_name }}</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="text-blue fs-7 col-4 col-md-4">
-                                <span class="px-2">Current Class:</span>
-                            </div>
-                            <div class="col-8 fs-7 col-md-8">
-                                <span id="previousSchool" class="text-capitalize text-blue">{{ $user->currentClassApplying->class_name }}</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="text-blue fs-7 col-4 col-md-4">
-                                <span class="px-2">Abnormalities:</span>
-                            </div>
-                            <div class="col-8 fs-7 col-md-8">
-                                <span id="Abnormalities" class="text-capitalize text-blue">{{ $user->healthInfo->abnormal_behaviour ? 'Yes' : 'No' }}</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="text-blue fs-7 col-4 col-md-4">
-                                <span class="px-2">Health Comment:</span>
-                            </div>
-                            <div class="col-8 fs-7 col-md-8">
-                                <span id="HealthComment" class="text-capitalize text-blue">{{ $user->healthInfo->description ?? 'N/A' }}</span>
+                                @php
+                                    $groupedSubjects = [];
+                                    foreach ($user->subjects as $subject) {
+                                        $groupedSubjects[$subject->subject_name][] = $subject->class->class_name ?? 'N/A';
+                                    }
+                                @endphp
+                                @foreach ($groupedSubjects as $subjectName => $classes)
+                                    <span id="HealthComment" class="text-capitalize text-blue"> {{ $subjectName }}@if(!$loop->last), @endif</span>
+                                @endforeach
                             </div>
                         </div>
                     </li>
@@ -182,81 +145,25 @@ website name --}}
                     <li class="list-group-item">
                         <div class="row">
                             <div class="text-blue fs-7 col-4 col-md-4">
-                                <span class="px-2">Health Condition:</span>
+                                <span class="px-2">Classes:</span>
                             </div>
                             <div class="col-8 fs-7 col-md-8">
-                                <span id="HealthCondition" class="text-capitalize text-blue">{{ $user->healthInfo->child_general_health_condition ?? 'N/A' }}</span>
+                                @foreach ($user->subjects as $subject)
+
+                                    <span id="HealthCondition" class="text-capitalize text-blue">
+                                        {{ $subject->class ? $subject->class->class_name : 'N/A' }}@if(!$loop->last), @endif
+                                    </span>
+
+                                @endforeach
                             </div>
                         </div>
                     </li>
+
+
                     <li class="list-group-item">
                         <div class="row">
                             <div class="text-blue fs-7 col-4 col-md-4">
-                                <span class="px-2">Parents Phone:</span>
-                            </div>
-                            <div class="col-8 fs-7 col-md-8">
-                                <a href="tel:+2348165179215" class="text-lowercase text-blue"
-                                    id="ParentsPhone">{{ $user->parentInfo->fathers_phone }}</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="text-blue fs-7 col-4 col-md-4">
-                                <span class="px-2">Parents Address:</span>
-                            </div>
-                            <div class="col-8 fs-7 col-md-8">
-                                <span id="ParentsAddress" class="text-capitalize text-blue">{{ $user->parentInfo->parent_address }}</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="text-blue fs-7 col-4 col-md-4">
-                                <span class="px-2">Parents Occupation:</span>
-                            </div>
-                            <div class="col-8 fs-7 col-md-8">
-                                <span id="ParentsOccupation" class="text-capitalize text-blue">{{ $user->parentInfo->occupation ?? 'N/A' }}</span>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="text-blue fs-7 col-4 col-md-4">
-                                <span class="px-2">Email:</span>
-                            </div>
-                            <div class="col-8 fs-7 col-md-8">
-                                <a href="mailto:{{ $user->email ?? 'N/A' }}" class="text-capitalize text-blue "
-                                    id="Email"><span>{{ $user->email ?? 'N/A' }}</span></a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="text-blue fs-7 col-4 col-md-4">
-                                <span class="px-2">Fathers Phone:</span>
-                            </div>
-                            <div class="col-8 fs-7 col-md-8">
-                                <a href="tel:{{ $user->parentInfo->fathers_phone }}" class="text-capitalize text-blue"
-                                    id="FathersPhone">{{ $user->parentInfo->fathers_phone }}</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="text-blue fs-7 col-4 col-md-4">
-                                <span class="px-2">Mothers Phone:</span>
-                            </div>
-                            <div class="col-8 fs-7 col-md-8">
-                                <a href="tel:{{ $user->parentInfo->mothers_phone ?? "N/A" }}" class="text-capitalize text-blue"
-                                    id="MothersPhone">{{ $user->parentInfo->mothers_phone ?? 'N/A' }}</a>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="text-blue fs-7 col-4 col-md-4">
-                                <span class="px-2">Students Username:</span>
+                                <span class="px-2">Staff Username:</span>
                             </div>
                             <div class="col-8 fs-7 col-md-8">
                                 <span id="StudentsPassword" class="text-capitalize text-blue">{{ $user->username }}</span>
@@ -264,7 +171,7 @@ website name --}}
                         </div>
                     </li>
                 </ul>
-                <a href="{{ url('/admin/update-student/'. $user->id) }}" class="btn my-4 btn-secondary text-capitalize">Edit/Update Student</a>
+                <a href="{{ url('/admin/update-staff/'. $user->id) }}" class="btn my-4 btn-secondary text-capitalize">Edit/Update Staff</a>
             </div>
         </div>
     </section>

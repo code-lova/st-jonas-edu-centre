@@ -27,10 +27,13 @@ return new class extends Migration
             $table->string('local_govt_origin')->after('residential_address');
             $table->string('religion')->after('local_govt_origin');
             $table->string('nationality')->after('religion');
-            $table->string('last_class_passed')->after('nationality')->nullable();
-            $table->string('current_class_applying')->after('last_class_passed')->nullable();
+            $table->unsignedBigInteger('last_class_passed')->after('nationality')->nullable();
+            $table->unsignedBigInteger('current_class_applying')->after('last_class_passed')->nullable();
             $table->string('class_teacher')->after('current_class_applying')->nullable()->comment('only for teachers');
             $table->enum('is_active', ['0', '1'])->default(1)->after('class_teacher');
+
+            $table->foreign('last_class_passed')->references('id')->on('classes');
+            $table->foreign('current_class_applying')->references('id')->on('classes');
         });
     }
 

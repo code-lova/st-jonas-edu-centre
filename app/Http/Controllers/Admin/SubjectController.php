@@ -2,25 +2,32 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Classes;
 use App\Models\Subject;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
-use App\Models\Classes;
 use Illuminate\Support\Facades\Validator;
 
 class SubjectController extends Controller
 {
     public function index(){
         $data['title'] = "Subject Dashboard";
-        $data['subject'] = Subject::latest()->get();
+        $data['subject'] = Subject::latest()->paginate(10);
         $data['classes'] = Classes::all();
         return view('dashboards.admin.subject.index', $data);
     }
 
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
-            'subject_name' => 'required|max:10|unique:subjects,subject_name',
-            'class_id' => 'required|integer'
+            'subject_name' => [
+            'required',
+            'max:30',
+                Rule::unique('subjects')->where(function ($query) use ($request) {
+                    return $query->where('class_id', $request->class_id);
+                }),
+            ],
+            'class_id' => 'required|integer|exists:classes,id',
         ]);
 
         if ($validator->fails()) {
@@ -41,7 +48,14 @@ class SubjectController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'subject_name' => 'required|max:30|unique:subjects,subject_name,' . $id,
+            'subject_name' => [
+            'required',
+            'max:30',
+                Rule::unique('subjects')->where(function ($query) use ($request, $id) {
+                    return $query->where('class_id', $request->class_id)
+                                ->where('id', '!=', $id); // Exclude the current subject
+                }),
+            ],
             'class_id' => 'required|exists:classes,id',
         ]);
 

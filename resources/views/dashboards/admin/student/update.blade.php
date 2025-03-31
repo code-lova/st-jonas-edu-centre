@@ -7,6 +7,41 @@ website name --}}
 
 @section('content')
 
+    <style>
+
+        select {
+            border: 1px solid #15151558;
+        }
+        option{
+            padding: .2rem;
+            color: #151515c1;
+        }
+
+        .form-check-input {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #650018;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .form-check-input:checked {
+            background-color: #650018;
+            border-color: #650018;
+        }
+
+        .form-check-input:disabled {
+            background-color: #ccc;
+            border-color: #999;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+    </style>
+
+
     <section class="main p-0 col-12  text-red col-md-9  text-center">
         <div class="main-body overflow-auto vh-100">
             <div class="d-flex justify-content-md-center py-2 sticky-top greyish">
@@ -156,12 +191,27 @@ website name --}}
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
+
+                         <!-- Previous school attended -->
+                         <div class="my-1 col-12 col-md-4 text-start">
+                            <label for="PreviousSchool" class="text-capitalize fs-9 form-label">Previous School Attended</label>
+                            <input type="text" id="PreviousSchool" name="previous_school"  value="{{ $user->previous_school }}" placeholder="Previous school"
+                                class="form-control form-control-sm @error('previous_school') is-invalid @enderror" required/>
+                            @error('previous_school')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <!-- last class passed  -->
                         <div class="my-1 col-12 col-md-4 text-start">
-                            <label for="LastClassPassed" class="text-capitalize fs-9 form-label">Last Class
-                                Passed</label>
-                            <input type="text" id="LastClassPassed" name="last_class_passed"  value="{{ $user->last_class_passed }}" placeholder="Last Class Passed"
-                                class="form-control form-control-sm @error('last_class_passed') is-invalid @enderror" required/>
+                            <label for="LastClassPassed" class="text-capitalize fs-9 form-label">Last Class Passed</label>
+                                <select name="last_class_passed" id="LastClassPassed" class="form-control form-control-sm @error('last_class_passed') is-invalid @enderror" required="">
+                                    @foreach ($classes as $val)
+                                        <option value="{{ $val->id }}" {{ old('last_class_passed', $user->last_class_passed) == $val->id ? 'selected' : '' }}>
+                                            {{ $val->class_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             @error('last_class_passed')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -170,15 +220,11 @@ website name --}}
                         <div class="my-1 col-12 col-md-4 text-start">
                             <label for="ClassCurrentlyApplyingFor" class="text-capitalize fs-9 form-label">Class Currently Applying For</label>
                             <select name="current_class_applying" id="ClassCurrentlyApplyingFor" class="form-control form-control-sm @error('current_class_applying') is-invalid @enderror" required="">
-                                <option value="SS 1" {{ $user->current_class_applying === 'SS 1' ? 'selected' : '' }}>
-                                    SS 1
-                                </option>
-                                <option value="SS 2" {{ $user->current_class_applying === 'SS 2' ? 'selected' : '' }}>
-                                    SS 2
-                                </option>
-                                <option value="JSS 3" {{ $user->current_class_applying === 'JSS 3' ? 'selected' : '' }}>
-                                    JSS 3
-                                </option>
+                                @foreach ($classes as $val)
+                                    <option value="{{ $val->id }}" {{ old('current_class_applying', $user->current_class_applying) == $val->id ? 'selected' : '' }}>
+                                        {{ $val->class_name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                         <h3 class="fs-6 pt-5 fw-bold">Health Information</h3>

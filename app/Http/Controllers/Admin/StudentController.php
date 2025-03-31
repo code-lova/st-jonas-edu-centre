@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\Classes;
 use App\Models\Healthinfo;
 use App\Models\ParentInfo;
 use Illuminate\Http\Request;
@@ -25,6 +26,7 @@ class StudentController extends Controller
 
     public function create(){
         $data['title'] = "Create New Student";
+        $data['classes'] = Classes::all();
         return view('dashboards.admin.student.create', $data);
     }
 
@@ -52,6 +54,7 @@ class StudentController extends Controller
                 'local_govt_origin' => $request->local_govt_origin,
                 'religion' => $request->religion,
                 'nationality' => $request->nationality,
+                'previous_school' => $request->previous_school,
                 'last_class_passed' => $request->last_class_passed,
                 'current_class_applying' => $request->current_class_applying,
             ]);
@@ -86,7 +89,7 @@ class StudentController extends Controller
 
             DB::commit(); // Commit transaction
 
-            return redirect()->back()->with('message', 'Student registered successfully!');
+            return redirect()->route('studentlist')->with('message', 'Student registered successfully!');
 
         } catch (\Exception $e) {
             DB::rollBack(); // Rollback transaction if any error occurs
@@ -103,6 +106,7 @@ class StudentController extends Controller
 
     public function update($id){
         $data['title'] = "Update Student Information";
+        $data['classes'] = Classes::all();
         $data['user'] = User::with(['healthInfo', 'parentInfo'])->where('id', $id)->firstOrFail();
         return view('dashboards.admin.student.update', $data);
     }
@@ -133,6 +137,7 @@ class StudentController extends Controller
                 'local_govt_origin' => $request->local_govt_origin,
                 'religion' => $request->religion,
                 'nationality' => $request->nationality,
+                'previous_school' => $request->previous_school,
                 'last_class_passed' => $request->last_class_passed,
                 'current_class_applying' => $request->current_class_applying,
             ]);
@@ -172,7 +177,7 @@ class StudentController extends Controller
 
             DB::commit(); // Commit transaction
 
-            return redirect()->back()->with('message', 'Student information updated successfully!');
+            return redirect()->route('studentlist')->with('message', 'Student information updated successfully!');
 
         } catch (\Exception $e) {
             DB::rollBack(); // Rollback transaction if any error occurs
