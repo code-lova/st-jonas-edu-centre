@@ -54,7 +54,7 @@ website name --}}
                                 <span class="px-2">Date of Birth:</span>
                             </div>
                             <div class="col-8 fs-7 col-md-8">
-                                <span id="DateOfBirth" class="text-capitalize text-blue"> {{date("Y/m/d", $user->date_of_birtt)}}</span>
+                                <span id="DateOfBirth" class="text-capitalize text-blue"> {{$user->date_of_birth, date("Y/m/d",)}}</span>
                             </div>
                         </div>
                     </li>

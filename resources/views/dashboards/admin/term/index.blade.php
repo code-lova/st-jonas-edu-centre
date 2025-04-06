@@ -117,6 +117,7 @@ website name --}}
         .modal-content button:hover {
             background: #650018;
         }
+
     </style>
 
      <!-- this is the end of the mobile view -->
@@ -131,12 +132,12 @@ website name --}}
                             d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
                     </svg>
                 </div>
-                <div class="fs-6 fw-bold text-red align-self-center "> Class Dashboard</div>
+                <div class="fs-6 fw-bold text-red align-self-center "> Term Dashboard</div>
             </div>
-            <h1>Class List</h1>
+            <h1>{{ $title }}</h1>
 
             <!-- Create Class Button -->
-            <button class="btn btn-secondary btn-sm fs-7 mt-4 mb-4" id="create-class">Create Class</button>
+            <button class="btn btn-secondary btn-sm fs-7 mt-4 mb-4" id="create">Create New term</button>
 
 
             <!-- Table detail -->
@@ -144,55 +145,68 @@ website name --}}
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Class</th>
-                        <th>Actions</th>
+                        <th>Session</th>
+                        <th>Term</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody id="classTableBody">
-                    @forelse ( $classes as $k=>$class )
+                    @forelse ( $term as $k=>$val )
                         <tr>
                             <td>{{ ++$k }}</td>
-                            <td>{{ $class->class_name }}</td>
+                            <td>{{ $val->session->name }}</td>
+                            <td>{{ $val->name }}</td>
+                            <td>{{ $val->start_date, date('Y/m/d') }}</td>
+                            <td>{{ $val->end_date,  date('Y/m/d') }}</td>
                             <td>
-                                <button class="btn btn-secondary btn-sm fs-7 edit-class" data-id="{{ $class->id }}" data-name="{{ $class->class_name }}">Edit</button>
-                                <button disabled class="btn btn-secondary btn-sm fs-7 delete-class" data-id="{{ $class->id }}">Delete</button>
+                                <button disabled class="btn btn-secondary btn-sm fs-7 delete" data-id="{{ $val->id }}">Delete</button>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="text-center">No Class Records Available</td>
+                            <td colspan="8" class="text-center">Term Not Yet Available</td>
                         </tr>
                     @endforelse
 
                 </tbody>
             </table>
 
-            <!-- Create Class Modal -->
+            <!-- Create session Modal -->
             <div id="createModal" class="class-modal">
                 <div class="modal-content">
                     <span class="close" id="closeCreateModal">&times;</span>
-                    <h2>Create Class</h2>
-                    <form action="{{ route('create.class') }}" id="createClassForm" method="POST">
+                    <h2>Create New Term</h2>
+                    <form action="{{ route('create.term') }}" id="createForm" method="POST">
                         @csrf
-                        <label for="className">Class Name:</label>
-                        <input type="text" value="{{ old('class_name') }}" id="className" name="class_name" required><br><br>
-                        <button type="submit" class="btn btn-secondary btn-sm fs-7" id="addClass">Add Class</button>
+                        <label class="pt-4" for="sessionName">Session:</label>
+                        <select id="sessionName" name="session_id" class="form-select" required>
+                            <option value="">Select a session</option>
+                            @foreach ($sessions as $session)
+                                <option value="{{ $session->id }}" {{ old('session_id') == $session->id ? 'selected' : '' }}>{{ $session->name }} Session</option>
+                            @endforeach
+                        </select>
+                        <br>
+                        <label for="termName">Term Name:</label>
+                        <select name="name" id="termName" class="form-select" required>
+                            <option value="">Select Term</option>
+                            <option value="First Term" {{ old('name') == 'First Term' ? 'selected' : '' }}>1st Term</option>
+                            <option value="Second Term" {{ old('name') == 'Second Term' ? 'selected' : '' }}>2nd Term</option>
+                            <option value="Third Term" {{ old('name') == 'Third Term' ? 'selected' : '' }}>3rd Term</option>
+                        </select>
+                        <br>
+                        <label for="startDate"> Start Date:</label>
+                        <input type="date" name="start_date" id="startDate" value="{{ old('start_date') }}" class="form-select" required>
+                        <br>
+                        <label for="endDate">End Date:</label>
+                        <input type="date" name="end_date" value="{{ old('end_date') }}" id="endDate" class="form-select" required>
+                        <br>
+                        <button type="submit" class="btn btn-secondary btn-sm fs-7" id="addClass">Add Term</button>
                     </form>
                 </div>
             </div>
 
-            <!-- Edit Class Modal -->
-            <div id="editModal" class="class-modal">
-                <div class="modal-content">
-                    <span class="close" id="closeEditModal">&times;</span>
-                    <h2>Edit Class</h2>
-                    <form id="editClassForm">
-                        <label for="editClassName">Class Name:</label>
-                        <input type="text" id="editClassName" name="editClassName" required><br><br>
-                        <button type="button" class="btn btn-secondary btn-sm fs-7" id="saveClassChanges">Save Changes</button>
-                    </form>
-                </div>
-            </div>
 
         </div>
     </section>
@@ -203,73 +217,29 @@ website name --}}
     document.addEventListener("DOMContentLoaded", function () {
         // Get modal elements
         const createModal = document.getElementById("createModal");
-        const editModal = document.getElementById("editModal");
 
         // Get open modal buttons
-        const createClassBtn = document.getElementById("create-class");
-        const editClassBtns = document.querySelectorAll(".edit-class");
-        const deleteClassBtns = document.querySelectorAll(".delete-class");
+        const createBtn = document.getElementById("create");
+        const deleteBtn = document.querySelectorAll(".delete");
 
         // Get close buttons
         const closeCreateModal = document.getElementById("closeCreateModal");
-        const closeEditModal = document.getElementById("closeEditModal");
-
-        // Input fields in the modals
-        const editClassNameInput = document.getElementById("editClassName");
-        let selectedClassId = null; // Store selected class ID
 
 
         // Open create modal
-        createClassBtn.addEventListener("click", function () {
+        createBtn.addEventListener("click", function () {
             createModal.style.display = "block";
-        });
-
-        // Open edit modal
-        editClassBtns.forEach(button => {
-            button.addEventListener("click", function () {
-                selectedClassId = this.getAttribute("data-id");
-                const className = this.getAttribute("data-name");
-
-                editClassNameInput.value = className;
-                editModal.style.display = "block";
-            });
-        });
-
-         // Send Update Request
-        document.getElementById("saveClassChanges").addEventListener("click", function () {
-            if (!selectedClassId) return;
-
-            const updatedName = editClassNameInput.value;
-
-            fetch(`class/update/${selectedClassId}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
-                },
-                body: JSON.stringify({ class_name: updatedName })
-            }).then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert("Error: " + JSON.stringify(data.error));
-                } else {
-                    alert(data.message);
-                    editModal.style.display = "none"; // Close the modal
-                    location.reload(); // Reload page to reflect changes
-                }
-            })
-            .catch(error => console.error("Error:", error));
         });
 
 
         // Delete Class
-        deleteClassBtns.forEach(button => {
+        deleteBtn.forEach(button => {
             button.addEventListener("click", function () {
-                const classId = this.getAttribute("data-id");
+                const sessionId = this.getAttribute("data-id");
 
-                if (!confirm("Are you sure you want to delete this class?")) return;
+                if (!confirm("Are you sure you want to delete this data?")) return;
 
-                fetch(`class/delete/${classId}`, {
+                fetch(`session/delete/${sessionId}`, {
                     method: "DELETE",
                     headers: {
                         "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content")
@@ -288,17 +258,10 @@ website name --}}
             createModal.style.display = "none";
         });
 
-        closeEditModal.addEventListener("click", function () {
-            editModal.style.display = "none";
-        });
-
         // Close modal when clicking outside
         window.addEventListener("click", function (event) {
             if (event.target === createModal) {
                 createModal.style.display = "none";
-            }
-            if (event.target === editModal) {
-                editModal.style.display = "none";
             }
         });
     });

@@ -16,24 +16,30 @@ website name --}}
             </div>
             <div class="col-12 col-md-8 d-flex justify-content-center  align-items-center">
 
-                <form action="/dashboard/" class="p-3 p-md-5 rounded-2 bg-blue text-light">
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
                     <div class="row">
                         <div class="my-1 col-12 text-start">
-                            <label for="teacheremail" class="text-capitalize fs-6 form-label">Email</label>
-                            <input type="email" id="teacheremail" placeholder=" Enter email"
-                                class="form-control p-0 form-control-sm text-black" required/>
+                            <label for="username" class="text-capitalize fs-6 text-light form-label">{{ __('Username') }}</label>
+                            <input type="text" id="email" name="email" placeholder=" Enter username"
+                                class="form-control p-0 form-control-sm text-black @error('email') is-invalid @enderror" value="{{ old('email') }}"  required autocomplete="email" autofocus/>
+                            @error('email')
+                                <strong class="text-white">{{ $message }}</strong>
+                            @enderror
                         </div>
                         <div class="my-1 col-12 text-start">
-                            <label for="password" class="text-capitalize fs-6  form-label">Enter
-                                Password</label>
-                            <input type="password" id="password" placeholder="Enter Password"
-                                class="form-control p-0 form-control-sm text-black" required/>
+                            <label for="password" class="text-capitalize fs-6 text-light form-label">Password</label>
+                            <input type="password" id="password" name="password" placeholder="***********"
+                                class="form-control p-0 form-control-sm text-black @error('password') is-invalid @enderror" required autocomplete="current-password"/>
+                            @error('password')
+                                <strong class="text-white">{{ $message }}</strong>
+                            @enderror
                         </div>
-                        <div class="pt-5 d-grid col-12 text-start">
-                            <input type="submit" value="Log In"
-                                class="btn btn-light text-blue btn-sm fs-7 text-capitalize">
+                        <div class="pt-3 d-grid col-12 text-start">
+                            <button type="submit" class="btn btn-light text-blue btn-sm fs-7 text-capitalize">
+                                {{ __('Login') }}
+                            </button>
                         </div>
-
                     </div>
                 </form>
             </div>

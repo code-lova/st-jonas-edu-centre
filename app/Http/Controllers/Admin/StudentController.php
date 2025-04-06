@@ -187,5 +187,37 @@ class StudentController extends Controller
     }
 
 
+    public function destroy($id)
+    {
+        try {
+            DB::beginTransaction(); // Start transaction
+
+            $user = User::findOrFail($id);
+
+            // Ensure the user is a student (optional: customize based on role column if applicable)
+            if ($user->role !== 'student') {
+                return redirect()->back()->with('error', 'Only student can be deleted.');
+            }
+
+            // Delete related records (example: TeacherSubjects, if applicable)
+            $user->subjects()->detach(); // If there's a many-to-many relationship
+            $user->healthInfo()->delete();
+            $user->parentInfo()->delete();
+            $user->comments()->delete();
+
+            // Delete user record
+            $user->delete();
+
+            DB::commit(); // Commit transaction
+
+            return redirect()->back()->with('message', 'student deleted successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack(); // Rollback transaction if an error occurs
+            Log::error('student deletion failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete student. Check logs.');
+        }
+    }
+
+
 
 }

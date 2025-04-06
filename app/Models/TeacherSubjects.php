@@ -17,6 +17,10 @@ class TeacherSubjects extends Model
         return $this->belongsTo(Subject::class, 'subject_id');
     }
 
+    public function class(){
+        return $this->belongsTo(Classes::class, 'class_id');
+    }
+
     public function teacher(){
         return $this->belongsTo(User::class, 'user_id');
     }

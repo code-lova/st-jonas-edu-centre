@@ -41,7 +41,7 @@ class StoreStudentRequest extends FormRequest
             'nationality' => 'required|string|max:255',
             'previous_school' => 'nullable|string|max:255',
             'last_class_passed' => 'nullable|integer|exists:classes,id',
-            'current_class_applying' => 'nullable|integer|exists:classes,id',
+            'current_class_applying' => 'required|integer|exists:classes,id',
             'class_teacher' => 'nullable|string|max:255',
 
 

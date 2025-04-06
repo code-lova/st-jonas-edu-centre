@@ -97,7 +97,7 @@ website name --}}
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="sex" id="sex-female" value="Female"
-                                {{ old('sex', 'Female') == 'Female' ? 'checked' : '' }}>
+                                {{ old('sex') == 'Female' ? 'checked' : '' }}>
                                 <label class="form-check-label fs-9" for="sex-female">
                                     Female
                                 </label>
@@ -194,7 +194,7 @@ website name --}}
                     <div class="my-1 col-12 col-md-4 text-start">
                         <label for="previousSchool" class="text-capitalize fs-9 form-label">Previous School Attended</label>
                         <input type="text" id="previousSchool" name="previous_school"  value="{{ old('previous_school') }}" placeholder="Leave blank or N/A if none"
-                            class="form-control form-control-sm @error('previous_school') is-invalid @enderror" required/>
+                            class="form-control form-control-sm @error('previous_school') is-invalid @enderror"/>
                         @error('previous_school')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -206,7 +206,7 @@ website name --}}
                         <select name="last_class_passed"  value="{{ old('last_class_passed') }}" id="LastClassPassed" class="form-control form-control-sm @error('last_class_passed') is-invalid @enderror" required="">
                             <option value="">Select previous class</option>
                             @foreach ( $classes as $val)
-                                <option value="{{ $val->id }}">{{ $val->class_name }}</option>
+                                <option value="{{ $val->id }}" {{ old('last_class_passed') == $val->id ? 'selected' : '' }}>{{ $val->class_name }}</option>
                             @endforeach
                         </select>
                         @error('last_class_passed')
@@ -219,7 +219,7 @@ website name --}}
                         <select name="current_class_applying"  value="{{ old('current_class_applying') }}" id="ClassCurrentlyApplyingFor" class="form-control form-control-sm @error('current_class_applying') is-invalid @enderror" required="">
                             <option value="">Select a current class</option>
                             @foreach ( $classes as $val)
-                                <option value="{{ $val->id }}">{{ $val->class_name }}</option>
+                                <option value="{{ $val->id }}" {{ old('current_class_applying') == $val->id ? 'selected' : '' }}>{{ $val->class_name }}</option>
                             @endforeach
                         </select>
                         @error('current_class_applying')

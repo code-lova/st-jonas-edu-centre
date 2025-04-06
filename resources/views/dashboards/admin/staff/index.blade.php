@@ -37,39 +37,41 @@ website name --}}
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($staffs as $k=>$val)
+                    @forelse ( $staffs as $k=>$val )
+                        <tr>
+                            <th scope="row">{{ ++$k }}</th>
+                            <td>{{ $val->firstname }}</td>
+                            <td>{{ $val->middlename ?? 'N/A' }}</td>
+                            <td>{{ $val->lastname }}</td>
+                            <td>{{ $val->class->class_name ?? 'N/A' }}</td>
+                            <td>
+                                @php
+                                    $groupedSubjects = [];
+                                    foreach ($val->subjects as $subject) {
+                                        $groupedSubjects[$subject->subject_name][] = $subject->class->class_name ?? 'N/A';
+                                    }
+                                @endphp
+                                @foreach ($groupedSubjects as $subjectName => $classes)
+                                    {{ $subjectName }} ({{ implode(', ', $classes) }})@if(!$loop->last), @endif
+                                @endforeach
+                            </td>
+                            <td>
+                                <a href="{{ url('admin/staff-detail/'.$val->id) }}" class="btn btn-sm btn-info">View</a>
 
-                    <tr>
-                        <th scope="row">{{ ++$k }}</th>
-                        <td>{{ $val->firstname }}</td>
-                        <td>{{ $val->middlename ?? 'N/A' }}</td>
-                        <td>{{ $val->lastname }}</td>
-                        <td>{{ $val->class->class_name ?? 'N/A' }}</td>
-                        <td>
-                            @php
-                                $groupedSubjects = [];
-                                foreach ($val->subjects as $subject) {
-                                    $groupedSubjects[$subject->subject_name][] = $subject->class->class_name ?? 'N/A';
-                                }
-                            @endphp
-                            @foreach ($groupedSubjects as $subjectName => $classes)
-                                {{ $subjectName }} ({{ implode(', ', $classes) }})@if(!$loop->last), @endif
-                            @endforeach
-                        </td>
-                        <td>
-                            <a href="{{ url('admin/staff-detail/'.$val->id) }}" class="btn btn-sm btn-info">View</a>
+                                <button onclick="confirmDelete({{ $val->id }})" class="btn btn-sm btn-danger">Delete</button>
 
-                            <button onclick="confirmDelete({{ $val->id }})" class="btn btn-sm btn-danger">Delete</button>
+                                <form id="delete-form-{{ $val->id }}" action="{{ route('staff.delete', $val->id) }}" method="POST" style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
 
-                            <form id="delete-form-{{ $val->id }}" action="{{ route('staff.delete', $val->id) }}" method="POST" style="display: none;">
-                                @csrf
-                                @method('DELETE')
-                            </form>
-
-                        </td>
-                    </tr>
-                    @endforeach
-
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="text-center">Staff Records Not Available</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

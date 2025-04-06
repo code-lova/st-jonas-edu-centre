@@ -38,7 +38,7 @@ class StoreStaffRequest extends FormRequest
             'local_govt_origin' => 'nullable|string|max:255',
             'religion' => 'nullable|string|max:255',
             'nationality' => 'required|string|max:255',
-            'class_teacher' => 'nullable|string|max:255',
+            'class_teacher' => 'required|string|max:255',
         ];
     }
 

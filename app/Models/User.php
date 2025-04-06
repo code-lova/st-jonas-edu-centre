@@ -85,4 +85,9 @@ class User extends Authenticatable
         return $this->belongsTo(Classes::class, 'last_class_passed', 'id');
     }
 
+    public function comments(){
+        return $this->hasOne(PrincipalComment::class, 'user_id', 'id');
+
+    }
+
 }

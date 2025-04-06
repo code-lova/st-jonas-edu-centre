@@ -189,7 +189,7 @@ website name --}}
                                 data-class-id="{{ $val->class_id }}">
                                 Edit
                             </button>
-                            <button class="btn btn-secondary btn-sm fs-7 delete-sc" data-id="{{ $val->id }}">Delete</button>
+                            <button disabled class="btn btn-secondary btn-sm fs-7 delete-sc" data-id="{{ $val->id }}">Delete</button>
                         </td>
                     </tr>
                    @empty
@@ -216,12 +216,12 @@ website name --}}
                     <form action="{{ route('create.subject') }}" id="createForm" method="POST">
                         @csrf
                         <label for="className">Subject Name:</label>
-                        <input type="text" id="className" name="subject_name" required><br><br>
+                        <input type="text" id="className" value="{{ old('subject_name') }}" name="subject_name" required><br><br>
                         <label for="className">Class Name:</label>
                         <select name="class_id" id="">
                             <option value="">Select a Class</option>
                             @foreach ($classes as $val)
-                                <option value="{{ $val->id }}">{{ $val->class_name }}</option>
+                                <option value="{{ $val->id }}" {{ old('class_id') == $val->id ? 'selected' : '' }}>{{ $val->class_name }}</option>
                             @endforeach
                         </select>
 

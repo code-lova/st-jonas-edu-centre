@@ -2,12 +2,14 @@
     <section class="side-nav text-light d-flex flex-column py-4">
         <div class="flex-grow-1">
         <div class="py-2">
-            <div class="fw-semibold fs-6">Osasere</div>
-            <div class="fs-8">edenosas1@gmail.com</div>
+            <div class="fw-semibold fs-6">{{ Auth::user()->firstname }}</div>
+            <div class="fs-8">{{ Auth::user()->lastname }}</div>
         </div>
         <div class="d-grid pt-3 pb-1 p-0">
-            <a class="link-underline rounded-1 small-menu-active-blue small-menu-blue p-2 text-light fs-7 link-underline-opacity-0"
-            href="/dashboard/">
+
+            <a class="link-underline rounded-1 p-2 text-light fs-7 link-underline-opacity-0
+                {{ Request::is('teacher/dashboard') ? 'bg-white text-dark fw-bold' : 'small-menu-blue' }}"
+                href="{{ url('/teacher/dashboard') }}">
             <div class="d-flex gap-2 align-items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-activity" viewBox="0 0 16 16">
@@ -18,8 +20,9 @@
             </a>
         </div>
         <div class="d-grid py-1 p-0">
-            <a class="link-underline rounded-1 small-menu-blue p-2 text-light fs-7 link-underline-opacity-0"
-            href="/dashboard/enter-scores/">
+            <a class="link-underline rounded-1 p-2 text-light fs-7 link-underline-opacity-0
+                {{ Route::currentRouteName() == 'enterscore' ? 'bg-white text-dark fw-bold' : 'small-menu-blue' }}"
+                href="{{ route('enterscore') }}">
             <div class="d-flex gap-2 align-items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-database-add" viewBox="0 0 16 16">
@@ -32,8 +35,9 @@
             </a>
         </div>
         <div class="d-grid py-1 p-0">
-            <a class="link-underline rounded-1 small-menu-blue p-2 text-light fs-7 link-underline-opacity-0"
-            href="/dashboard/Comments/">
+            <a class="link-underline rounded-1 p-2 text-light fs-7 link-underline-opacity-0
+                {{ Route::currentRouteName() == 'comment.list' ? 'bg-white text-dark fw-bold' : 'small-menu-blue' }}"
+                href="{{ route('comment.list') }}">
             <div class="d-flex gap-2 align-items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-square-text" viewBox="0 0 16 16">
                 <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1h-2.5a2 2 0 0 0-1.6.8L8 14.333 6.1 11.8a2 2 0 0 0-1.6-.8H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2.5a1 1 0 0 1 .8.4l1.9 2.533a1 1 0 0 0 1.6 0l1.9-2.533a1 1 0 0 1 .8-.4H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"></path>
@@ -43,8 +47,9 @@
             </a>
         </div>
         <div class="d-grid py-1 p-0">
-            <a class="link-underline rounded-1 small-menu-blue p-2 text-light fs-7 link-underline-opacity-0"
-            href="/dashboard/my-profile/">
+            <a class="link-underline rounded-1 p-2 text-light fs-7 link-underline-opacity-0
+                {{ Route::currentRouteName() == 'my.profile' ? 'bg-white text-dark fw-bold' : 'small-menu-blue' }}"
+                href="{{ route('my.profile') }}">
             <div class="d-flex gap-2 align-items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                 class="bi bi-person" viewBox="0 0 16 16">
@@ -57,17 +62,21 @@
         <hr class="text-light" />
         </div>
         <div class="d-grid py-1 p-0">
-        <a class="link-underline rounded-1 small-menu-blue p-2 text-light fs-7 link-underline-opacity-0">
-            <div class="d-flex gap-2 align-items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                class="bi bi-box-arrow-left" viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z" />
-                <path fill-rule="evenodd"
-                d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z" />
-            </svg>Log Out
-            </div>
-        </a>
+            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                class="link-underline rounded-1 small-menu-blue p-2 text-light fs-7 link-underline-opacity-0">
+                <div class="d-flex gap-2 align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-box-arrow-left" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                            d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0z" />
+                        <path fill-rule="evenodd"
+                            d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708z" />
+                    </svg>{{ __('Logout') }}
+                </div>
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
         </div>
     </section>
 </div>

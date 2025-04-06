@@ -64,6 +64,9 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function (){
         Route::get('/student-detail/{id}', 'edit')->name('viewstudent');
         Route::get('/update-student/{id}', 'update')->name('updatestudent');
         Route::put('/update-student/{id}', 'updateStudent');
+        Route::delete('/delete-student/{id}', 'destroy')->name('student.delete');
+
+
     });
 
     Route::controller(\App\Http\Controllers\Admin\StaffController::class)->group(function (){
@@ -92,6 +95,33 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function (){
     });
 
 
+    Route::controller(\App\Http\Controllers\Admin\SessionController::class)->group(function () {
+        Route::get('/session', 'index')->name('sessionlist');
+        Route::post('/session', 'store')->name('create.session');
+        Route::delete('/session/delete/{id}', 'destroy');
+
+    });
+
+    Route::controller(\App\Http\Controllers\Admin\TermController::class)->group(function () {
+        Route::get('/term', 'index')->name('termlist');
+        Route::post('/term', 'store')->name('create.term');
+        Route::delete('/term/delete/{id}', 'destroy');
+
+    });
+
+    Route::controller(\App\Http\Controllers\Admin\PrincipalCommentController::class)->group(function () {
+        Route::get('/comment', 'index')->name('commentlist');
+        Route::get('/students-by-class', 'getStudentsByClass')->name('students.by.class');
+        Route::post('/comment', 'store')->name('create.comment');
+        Route::delete('/delete-comment/{id}', 'destroy');
+
+    });
+
+
+
+
+
+
 
 
 });
@@ -101,6 +131,34 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function (){
 Route::prefix('teacher')->middleware(['auth', 'isTeacher'])->group(function (){
 
     Route::get('/dashboard', [\App\Http\Controllers\Teacher\DashboardController::class, 'index']);
+
+    Route::controller(\App\Http\Controllers\Teacher\ScoreController::class)->group(function () {
+        Route::get('/enter-score', 'create')->name('enterscore');
+
+        // Handle session and term selection, redirect to subject-class view
+        Route::post('/select-session-term', 'handleSessionTermSelection')->name('teacher.handle.session_term');
+
+         // Display score input form for a class-subject combo
+        Route::post('/manage-scores', 'showScoreForm')->name('teacher.manage_scores');
+
+        // Handle score updates (optional POST/PUT route)
+        Route::post('/save-scores', 'saveScores')->name('teacher.save_scores');
+
+    });
+
+    Route::controller(\App\Http\Controllers\Teacher\TeacherCommentController::class)->group(function (){
+        Route::get('/comment', 'index')->name('comment.list');
+        
+        Route::get('/students-by-class', 'getStudentsByClass')->name('students.by.class');
+
+        Route::post('/comment', 'store')->name('create.teacher.comment');
+
+
+        Route::get('/profile', 'profilePage')->name('my.profile');
+
+
+
+    });
 
 });
 

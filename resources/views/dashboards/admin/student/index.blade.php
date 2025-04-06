@@ -36,24 +36,29 @@ website name --}}
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($students as $k=>$val)
+                    @forelse ( $students as $k=>$val )
+                        <tr>
+                            <th scope="row">{{ ++$k }}</th>
+                            <td>{{ $val->firstname }}</td>
+                            <td>{{ $val->lastname }}</td>
+                            <td>{{ $val->sex }}</td>
+                            <td>{{ $val->currentClassApplying->class_name }}</td>
+                            <td>
+                                <a href="{{ url('admin/student-detail/'.$val->id) }}" class="btn btn-sm btn-info">View</a>
+                                <a href="" class="btn btn-sm btn-secondary">View Results</a>
 
-                    <tr>
-                        <th scope="row">{{ ++$k }}</th>
-                        <td>{{ $val->firstname }}</td>
-                        <td>{{ $val->lastname }}</td>
-                        <td>{{ $val->sex }}</td>
-                        <td>{{ $val->currentClassApplying->class_name }}</td>
-                        <td>
-                            <a href="{{ url('admin/student-detail/'.$val->id) }}" class="btn btn-sm btn-info">View</a>
-                            <!-- Add this before the Edit/Update Student button -->
-                            <a href="" class="btn btn-sm btn-secondary">View Results</a>
-                            <form action="" method="POST" style="display:inline;">
-                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
+                                <button onclick="confirmDelete({{ $val->id }})" class="btn btn-sm btn-danger">Delete</button>
+                                <form id="delete-form-{{ $val->id }}" action="{{ route('student.delete', $val->id) }}" method="POST" style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="text-center">Student Records Not Available</td>
+                        </tr>
+                    @endforelse
 
                 </tbody>
             </table>
@@ -61,3 +66,11 @@ website name --}}
     </section>
 
 @endsection
+
+<script>
+    function confirmDelete(studentId) {
+        if (confirm("Are you sure you want to delete this record? This action cannot be undone!")) {
+            document.getElementById('delete-form-' + studentId).submit();
+        }
+    }
+</script>

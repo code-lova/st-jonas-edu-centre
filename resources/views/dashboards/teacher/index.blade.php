@@ -18,20 +18,20 @@ website name --}}
                     d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
                 </svg>
                 </div>
-                <div class="fs-6 fw-bold text-blue align-self-center ">Dashboard</div>
+                <div class="fs-6 fw-bold text-blue align-self-center ">{{ $title }}</div>
             </div>
             <div class="bg-light vh-100 px-3 rounded">
                 <div class="text-start px-2 py-5">
                 <div class="fs-6 d-flex">
-                    Welcome Tutor
-                    <div class="px-1 fw-semibold">Osasere</div>
+                    Welcome Tutor {{ Auth::user()->firstname }}
+                    <div class="px-1 fw-semibold">{{ Auth::user()->lastname }}</div>
                 </div>
                 <div class="fs-7">
                     Hope you are having a great time
                 </div>
                 </div>
                 <div class="d-flex gap-3">
-                <a href="/dashboard/enter-scores/" class="btn btn-secondary btn-sm fs-7">Manage scores</a>
+                <a href="{{ route('enterscore') }}" class="btn btn-secondary btn-sm fs-7">Manage scores</a>
                 <a href="/dashboard/my-profile/" class="btn btn-sm btn-secondary fs-7">View my profile</a>
                 </div>
             </div>

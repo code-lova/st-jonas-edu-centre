@@ -97,7 +97,7 @@ website name --}}
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="sex" id="sex-female" value="Female"
-                                    {{ old('sex', 'Female') == 'Female' ? 'checked' : '' }}>
+                                    {{ old('sex') == 'Female' ? 'checked' : '' }}>
                                     <label class="form-check-label fs-9" for="sex-female">
                                         Female
                                     </label>
@@ -226,7 +226,7 @@ website name --}}
                                     </div>
                                 </div>
                                 @empty
-                                    <div>
+                                    <div style="margin: 0 auto; margin-top: 20px;">
                                         <h3 class="fw-bold fs-6 pt-4">There are no available subjects for now</h3>
                                     </div>
                                 @endforelse
