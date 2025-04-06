@@ -130,16 +130,26 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function (){
 //Group Route for Teacher Profile
 Route::prefix('teacher')->middleware(['auth', 'isTeacher'])->group(function (){
 
-    Route::get('/dashboard', [\App\Http\Controllers\Teacher\DashboardController::class, 'index']);
+    Route::get('/dashboard', [\App\Http\Controllers\Teacher\DashboardController::class, 'index'])->name('teacher.dashboard');
 
     Route::controller(\App\Http\Controllers\Teacher\ScoreController::class)->group(function () {
         Route::get('/enter-score', 'create')->name('enterscore');
 
+
         // Handle session and term selection, redirect to subject-class view
         Route::post('/select-session-term', 'handleSessionTermSelection')->name('teacher.handle.session_term');
+        // Redirect the user if they send a GET request to the route
+        Route::get('select-session-term', function () {
+            return redirect()->route('enterscore')->with('error', 'Please use the form to manage scores.');
+        });
+
 
          // Display score input form for a class-subject combo
         Route::post('/manage-scores', 'showScoreForm')->name('teacher.manage_scores');
+        // Redirect the user if they send a GET request to the route
+        Route::get('/manage-scores', function () {
+            return redirect()->route('teacher.dashboard')->with('error', 'Please use the form to manage scores.');
+        });
 
         // Handle score updates (optional POST/PUT route)
         Route::post('/save-scores', 'saveScores')->name('teacher.save_scores');
@@ -148,17 +158,26 @@ Route::prefix('teacher')->middleware(['auth', 'isTeacher'])->group(function (){
 
     Route::controller(\App\Http\Controllers\Teacher\TeacherCommentController::class)->group(function (){
         Route::get('/comment', 'index')->name('comment.list');
-        
+
         Route::get('/students-by-class', 'getStudentsByClass')->name('students.by.class');
 
         Route::post('/comment', 'store')->name('create.teacher.comment');
 
-
         Route::get('/profile', 'profilePage')->name('my.profile');
 
-
+        Route::delete('/delete-comment/{id}', 'destroy');
 
     });
+
+
+    Route::controller(\App\Http\Controllers\Teacher\ProfileController::class)->group(function (){
+
+        Route::get('/profile', 'index')->name('my.profile');
+
+        Route::post('/change-password', 'changePassword')->name('profile.change_password');
+
+    });
+
 
 });
 
@@ -167,5 +186,12 @@ Route::prefix('teacher')->middleware(['auth', 'isTeacher'])->group(function (){
 Route::prefix('student')->middleware(['auth', 'isStudent'])->group(function (){
 
     Route::get('/dashboard', [\App\Http\Controllers\Student\DashboardController::class, 'index']);
+
+    Route::get('/result', [\App\Http\Controllers\Student\ResultController::class, 'index'])->name('result');
+
+    Route::get('/profile', [\App\Http\Controllers\Student\ProfileController::class, 'index'])->name('profile');
+
+    Route::get('/student-fees', [\App\Http\Controllers\Student\ProfileController::class, 'index'])->name('fees');
+
 
 });

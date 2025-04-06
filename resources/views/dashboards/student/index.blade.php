@@ -25,14 +25,14 @@ website name --}}
             <div class="text-start px-2 py-5">
             <div class="fs-7 d-flex">
                 Welcome
-                <span class="px-1 fw-semibold">Iyekekpolor Osamudiamen</span>
+                <span class="px-1 fw-semibold">{{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</span>
             </div>
             <div class="fs-7">
                 Hope you are having a great time
             </div>
             </div>
             <div class="d-flex gap-4">
-            <a href="./results/" class="btn btn-primary fs-7 btn-sm">View My Result</a>
+            <a href="{{ route('result') }}" class="btn btn-primary fs-7 btn-sm">View My Result</a>
             <a href="/dashboard-student/my-profile/" class="btn fs-7 btn-sm btn-primary">Holiday Assignment</a>
             </div>
         </div>

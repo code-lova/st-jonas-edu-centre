@@ -95,7 +95,7 @@
         document.addEventListener("DOMContentLoaded", function () {
             const classDropdown = document.getElementById("student"); // class dropdown
             const studentDropdown = document.getElementById("student-select");
-            const oldUserId = "{{ old('user_id') }}";
+            const oldUserId = "{{ old('student_id') }}";
 
             function fetchStudentsAndSelectOld(classId) {
                 studentDropdown.innerHTML = '<option value="">Loading students...</option>';

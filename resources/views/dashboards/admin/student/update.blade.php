@@ -218,7 +218,7 @@ website name --}}
                         </div>
                         <!-- class currently applying for  -->
                         <div class="my-1 col-12 col-md-4 text-start">
-                            <label for="ClassCurrentlyApplyingFor" class="text-capitalize fs-9 form-label">Class Currently Applying For</label>
+                            <label for="ClassCurrentlyApplyingFor" class="text-capitalize fs-9 form-label">Class Currently Applying For (Mandatory)</label>
                             <select name="current_class_applying" id="ClassCurrentlyApplyingFor" class="form-control form-control-sm @error('current_class_applying') is-invalid @enderror" required="">
                                 @foreach ($classes as $val)
                                     <option value="{{ $val->id }}" {{ old('current_class_applying', $user->current_class_applying) == $val->id ? 'selected' : '' }}>

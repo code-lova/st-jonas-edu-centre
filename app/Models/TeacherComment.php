@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class TeacherComment extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'class_id', 'term_id', 'session_id', 'comment'];
+    protected $fillable = ['student_id', 'teacher_id', 'class_id', 'term_id', 'session_id', 'comment'];
 
     public function student() {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'student_id', 'id');
     }
 
     public function class() {

@@ -32,7 +32,7 @@ website name --}}
                 </div>
                 <div class="d-flex gap-3">
                 <a href="{{ route('enterscore') }}" class="btn btn-secondary btn-sm fs-7">Manage scores</a>
-                <a href="/dashboard/my-profile/" class="btn btn-sm btn-secondary fs-7">View my profile</a>
+                <a href="{{ route('my.profile') }}" class="btn btn-sm btn-secondary fs-7">View my profile</a>
                 </div>
             </div>
         </div>

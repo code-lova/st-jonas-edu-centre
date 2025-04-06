@@ -115,6 +115,16 @@ website name --}}
                             @enderror
                         </div>
 
+                         <!-- email  -->
+                         <div class="my-1 col-12 col-md-4 text-start">
+                            <label for="email" class="text-capitalize fs-9 form-label">Email</label>
+                            <input type="text" id="email" name="email" value="{{ old('email') }}" placeholder="email address"
+                                class="form-control form-control-sm @error('email') is-invalid @enderror" />
+                            @error('email')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <!-- place of birth  -->
                         <div class="my-1 col-12 text-start">
                             <label for="PlaceOfBirth" class="text-capitalize fs-9 form-label">Place Of
@@ -144,6 +154,26 @@ website name --}}
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
+                         <!-- Phone contact  -->
+                         <div class="my-1 col-12 col-md-4 text-start">
+                            <label for="phone" class="text-capitalize fs-9 form-label">Mobile Contact (Required)</label>
+                            <input type="text" id="phone" name="phone" value="{{ old('phone') }}" placeholder="Enter mobile number"
+                                class="form-control form-control-sm @error('phone') is-invalid @enderror" required />
+                            @error('phone')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                         <!-- WhatsApp contact  -->
+                         <div class="my-1 col-12 col-md-4 text-start">
+                            <label for="whatsApp_contact" class="text-capitalize fs-9 form-label">WhatsApp (Optional)</label>
+                            <input type="text" id="whatsApp_contact" name="whatsApp_contact" value="{{ old('whatsApp_contact') }}" placeholder="Enter mobile number"
+                                class="form-control form-control-sm @error('whatsApp_contact') is-invalid @enderror" />
+                            @error('whatsApp_contact')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <div class="my-1 col-12 col-md-4 text-start"></div>
                         <!-- Residential address  -->
                         <div class="my-1 col-12 text-start">

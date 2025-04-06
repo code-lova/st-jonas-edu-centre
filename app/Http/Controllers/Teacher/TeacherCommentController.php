@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Classes;
 use App\Models\Session;
 use App\Models\TeacherComment;
+use App\Models\TeacherSubjects;
 use App\Models\Term;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,11 +15,21 @@ use Illuminate\Support\Facades\Validator;
 class TeacherCommentController extends Controller
 {
     public function index(){
+
+        $teacherId = auth()->id();
+
+        // Get all subjects & classes the teacher teaches
+        $assignments = TeacherSubjects::with('subject', 'class')
+        ->where('user_id', $teacherId)
+        ->get();
+
         $data['title'] = "Comment Dashboard";
         $data['sessions'] = Session::all();
         $data['terms'] = Term::all();
-        $data['classes'] = Classes::all();
-        $data['comments'] = TeacherComment::all();
+        $data['classAssigned'] = $assignments;
+        $data['teacherId'] = $teacherId;
+
+        $data['comments'] = TeacherComment::where('teacher_id', $teacherId)->latest()->get();
         return view('dashboards.teacher.comments', $data);
     }
 
@@ -40,13 +51,15 @@ class TeacherCommentController extends Controller
             'session_id' => 'required|exists:sessions,id',
             'term_id' => 'required|exists:terms,id',
             'class_id' => 'required|exists:classes,id',
-            'user_id' => 'required|exists:users,id',
+            'student_id' => 'required|exists:users,id',
+            'teacher_id' => 'required|exists:users,id',
             'comment' => 'required|max:1000',
         ], [
             'session_id.required' => 'Academic session is required.',
             'term_id.required' => 'Academic term is required.',
             'class_id.required' => 'The student class is required.',
-            'user_id.required' => 'User ID is required.',
+            'student_id.required' => 'Student ID is required.',
+            'teacher_id.required' => 'Teacher ID is required.',
             'comment.required' => 'Comment cannot be empty.',
             'comment.max' => 'Comment must not exceed 1000 characters.',
         ]);
@@ -58,15 +71,16 @@ class TeacherCommentController extends Controller
                 ->with('error', $validator->errors()->first());
         }
 
-        // Check if the user already has 2 comments for the same session, term, and class
+        // Check if the user already has 1 comments for the same teacher, session, term, and class
         $existingCommentCount = TeacherComment::where('session_id', $request->session_id)
             ->where('term_id', $request->term_id)
             ->where('class_id', $request->class_id)
-            ->where('user_id', $request->user_id)
+            ->where('student_id', $request->student_id)
+            ->where('teacher_id', $request->teacher_id)
             ->count();
 
         if ($existingCommentCount >= 1) {
-            return redirect()->back()->with('error', 'User already has a comments for this term.');
+            return redirect()->back()->with('error', 'You already gave this student a comment.');
         }
 
         // Create and save the comment
@@ -74,7 +88,8 @@ class TeacherCommentController extends Controller
             'session_id' => $request->session_id,
             'term_id' => $request->term_id,
             'class_id' => $request->class_id,
-            'user_id' => $request->user_id,
+            'student_id' => $request->student_id,
+            'teacher_id' => $request->teacher_id,
             'comment' => $request->comment,
         ]);
 

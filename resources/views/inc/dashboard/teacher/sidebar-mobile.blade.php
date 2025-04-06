@@ -3,8 +3,8 @@
     <div class="d-flex justify-content-between align-items-center">
         <div class="px-1">
         <div class="py-2">
-            <div class="fs-6 fw-semibold">Osasere</div>
-            <div class="fs-8">edenosas1@gmail.com</div>
+            <div class="fw-semibold fs-6">{{ Auth::user()->firstname }} {{ Auth::user()->lastname }} </div>
+            <div class="fs-8">{{ Auth::user()->email }}</div>
         </div>
 
         </div>

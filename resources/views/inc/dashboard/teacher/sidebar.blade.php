@@ -2,8 +2,8 @@
     <section class="side-nav text-light d-flex flex-column py-4">
         <div class="flex-grow-1">
         <div class="py-2">
-            <div class="fw-semibold fs-6">{{ Auth::user()->firstname }}</div>
-            <div class="fs-8">{{ Auth::user()->lastname }}</div>
+            <div class="fw-semibold fs-6">{{ Auth::user()->firstname }} {{ Auth::user()->lastname }} </div>
+            <div class="fs-8">{{ Auth::user()->email ?? 'tutor@email.com' }}</div>
         </div>
         <div class="d-grid pt-3 pb-1 p-0">
 

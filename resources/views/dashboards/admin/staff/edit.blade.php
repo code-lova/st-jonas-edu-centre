@@ -35,6 +35,16 @@ website name --}}
                     <li class="list-group-item">
                         <div class="row">
                             <div class="text-blue fs-7 col-4 col-md-4">
+                                <span class="px-2">Email:</span>
+                            </div>
+                            <div class="col-8 fs-7 col-md-8">
+                                <span id="email" class="text-capitalize text-blue">{{ $user->email ?? 'N/A' }}</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="text-blue fs-7 col-4 col-md-4">
                                 <span class="px-2">Gender:</span>
                             </div>
                             <div class="col-8 fs-7 col-md-8">
@@ -49,6 +59,26 @@ website name --}}
                             </div>
                             <div class="col-8 fs-7 col-md-8">
                                 <span id="DateOfBirth" class="text-capitalize text-blue"> {{ \Carbon\Carbon::parse($user->date_of_birth)->format('jS F, Y') }}</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="text-blue fs-7 col-4 col-md-4">
+                                <span class="px-2">Phone No.:</span>
+                            </div>
+                            <div class="col-8 fs-7 col-md-8">
+                                <span id="phone" class="text-capitalize text-blue">{{ $user->phone ?? 'N/A' }}</span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="text-blue fs-7 col-4 col-md-4">
+                                <span class="px-2">WhatsApp Contact:</span>
+                            </div>
+                            <div class="col-8 fs-7 col-md-8">
+                                <span id="whatsapp" class="text-capitalize text-blue">{{ $user->whatsApp_contact ?? 'N/A' }}</span>
                             </div>
                         </div>
                     </li>

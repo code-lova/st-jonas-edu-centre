@@ -31,8 +31,8 @@ website name --}}
               </div>
             </div>
             <div class="d-flex gap-3">
-              <a href="../staffs/" class="btn btn-secondary btn-sm fs-7">View Staff</a>
-              <a href="../students/" class="btn btn-sm btn-secondary fs-7">View Student</a>
+              <a href="{{ route('staff.list') }}" class="btn btn-secondary btn-sm fs-7">View Staff</a>
+              <a href="{{ route('studentlist') }}" class="btn btn-sm btn-secondary fs-7">View Student</a>
             </div>
 
                 <!-- The analytics of the school( Staffs and Students) -->

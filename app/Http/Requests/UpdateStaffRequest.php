@@ -28,6 +28,9 @@ class UpdateStaffRequest extends FormRequest
             'middlename' => 'nullable|string|max:255',
             'lastname' => 'required|string|max:255',
             'username' => 'required|string|max:255',
+            'email' => 'nullable|email',
+            'phone' => ['required', 'regex:/^\+?[0-9]{10,17}$/'],
+            'whatsApp_contact' => 'nullable',
             'password' => 'nullable|string|min:6|confirmed',
             'sex' => 'required|in:Male,Female',
             'date_of_birth' => 'required|date',
@@ -38,7 +41,7 @@ class UpdateStaffRequest extends FormRequest
             'local_govt_origin' => 'nullable|string|max:255',
             'religion' => 'nullable|string|max:255',
             'nationality' => 'required|string|max:255',
-            'class_teacher' => 'required|string|max:255',
+            'class_teacher' => 'nullable|string|max:255',
         ];
     }
 

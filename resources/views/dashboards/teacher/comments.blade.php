@@ -45,14 +45,14 @@ website name --}}
                         <div class="col-md-4">
                             <select name="class_id" id="student" class="form-select" required>
                                 <option value="">Select student class</option>
-                                @foreach($classes as $class)
-                                    <option value="{{ $class->id }}" {{ old('class_id') == $class->id ? 'selected' : '' }}>{{ $class->class_name }}</option>
+                                @foreach($classAssigned as $class)
+                                    <option value="{{ $class->class_id }}" {{ old('class_id') == $class->class_id ? 'selected' : '' }}>{{ $class->class->class_name }}</option>
                                 @endforeach
                             </select>
                         </div>
 
                         <div class="col-md-4">
-                            <select name="user_id" id="student-select" class="form-select" required>
+                            <select name="student_id" id="student-select" class="form-select" required>
                                 <option value="">Select a class first</option>
                             </select>
                         </div>
@@ -61,8 +61,10 @@ website name --}}
                             <textarea name="comment" value="{{ old('comment') }}" id="comments" class="form-control" rows="3" placeholder="Enter your comment here" required></textarea>
                         </div>
 
+                        <input type="hidden" name="teacher_id" value="{{ $teacherId }}">
+
                         <div class="col-12">
-                            <button type="submit" class="btn btn-primary">Save Comment</button>
+                            <button type="submit" class="btn btn-secondary">Save Comment</button>
                         </div>
                     </div>
                 </form>
@@ -88,7 +90,7 @@ website name --}}
                                     <td>{{ $val->term->name }}</td>
                                     <td>{{ $val->comment }}</td>
                                     <td>
-                                        <form action="{{ url('admin/delete-comment/' . $val->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                        <form action="{{ url('teacher/delete-comment/' . $val->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this comment?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger">Delete</button>

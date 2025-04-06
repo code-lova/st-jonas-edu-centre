@@ -18,7 +18,7 @@ class PrincipalCommentController extends Controller
         $data['sessions'] = Session::all();
         $data['terms'] = Term::all();
         $data['classes'] = Classes::all();
-        $data['comments'] = PrincipalComment::all();
+        $data['comments'] = PrincipalComment::latest();
         return view('dashboards.admin.comments.index', $data);
     }
 
