@@ -2,34 +2,51 @@
 
 namespace App\Http\Controllers\Teacher;
 
-use App\Http\Controllers\Controller;
-use App\Models\Classes;
-use App\Models\Session;
-use App\Models\TeacherComment;
-use App\Models\TeacherSubjects;
 use App\Models\Term;
 use App\Models\User;
+use App\Models\Classes;
+use App\Models\Session;
 use Illuminate\Http\Request;
+use App\Models\TeacherComment;
+use App\Models\TeacherSubjects;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class TeacherCommentController extends Controller
 {
     public function index(){
 
-        $teacherId = auth()->id();
+        $teacher = Auth::user();
+        $teacherId = $teacher->id;
 
         // Get all subjects & classes the teacher teaches
-        $assignments = TeacherSubjects::with('subject', 'class')
-        ->where('user_id', $teacherId)
-        ->get();
+        // $assignments = TeacherSubjects::with('subject', 'class')
+        // ->where('user_id', $teacherId)
+        // ->get();
+        // Check if teacher is a class teacher (class_teacher not null and exists in classes table)
+
+        $classTeacherClass = null;
+        $isClassTeacher = false;
+
+        if (!is_null($teacher->class_teacher)) {
+            // Get the class that the logged in user is assigned a class teacher
+            $classTeacherClass = Classes::find($teacher->class_teacher);
+            $isClassTeacher = $classTeacherClass !== null;
+        }
+        $currentTermSession = Term::with('session')->where('status', '1')->first();
 
         $data['title'] = "Comment Dashboard";
         $data['sessions'] = Session::all();
         $data['terms'] = Term::all();
-        $data['classAssigned'] = $assignments;
         $data['teacherId'] = $teacherId;
+        $data['classTeacherClass'] = $classTeacherClass;
+        $data['isClassTeacher'] = $isClassTeacher;
+        $data['currentTermSession'] =$currentTermSession;
 
-        $data['comments'] = TeacherComment::where('teacher_id', $teacherId)->latest()->get();
+        //$data['classAssigned'] = $assignments;
+
+        $data['comments'] = TeacherComment::where('teacher_id', $teacherId)->where('class_id', $classTeacherClass->id)->latest()->get();
         return view('dashboards.teacher.comments', $data);
     }
 

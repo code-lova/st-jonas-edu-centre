@@ -20,19 +20,34 @@ website name --}}
                 </div>
                 <div class="fs-6 fw-bold text-blue align-self-center ">{{ $title }}</div>
             </div>
+            @if ($currentTermSession && $currentTermSession->session)
+                <div class="bg-light text-start px-3 py-2">
+                    <div class="fs-6 fw-semibold">
+                        CURRENT - SESSION: {{ $currentTermSession->session->name }},
+                        CURRENT - TERM: {{ $currentTermSession->name }}
+                    </div>
+                </div>
+            @else
+                <div class="alert alert-warning">
+                    No active term or session is currently set. Please ensure at least one term is created and activated by admin.
+                </div>
+            @endif
             <div class="bg-light vh-100 px-3 rounded">
                 <div class="text-start px-2 py-5">
-                <div class="fs-6 d-flex">
-                    Welcome Tutor {{ Auth::user()->firstname }}
-                    <div class="px-1 fw-semibold">{{ Auth::user()->lastname }}</div>
-                </div>
-                <div class="fs-7">
-                    Hope you are having a great time
-                </div>
+                    <div class="fs-5 fw-bold d-flex align-items-center">
+                        {{ $greeting ?? 'Welcome' }},
+                        <span class="ms-2"> {{ Auth::user()->firstname }} {{ Auth::user()->lastname }}</span>
+                    </div>
+                    <div class="fs-6 text-muted mb-3">
+                        <b> IT's,</b>  {{ $currentDateTime ?? now()->format('l, F j, Y - g:i A') }}
+                    </div>
+                    <div class="fs-7">
+                        Hope you are having a great time ?. What do you want to do today ?
+                    </div>
                 </div>
                 <div class="d-flex gap-3">
-                <a href="{{ route('enterscore') }}" class="btn btn-secondary btn-sm fs-7">Manage scores</a>
-                <a href="{{ route('my.profile') }}" class="btn btn-sm btn-secondary fs-7">View my profile</a>
+                    <a href="{{ route('enterscore') }}" class="btn btn-secondary btn-sm fs-7">Manage scores</a>
+                    <a href="{{ route('my.profile') }}" class="btn btn-sm btn-secondary fs-7">View my profile</a>
                 </div>
             </div>
         </div>

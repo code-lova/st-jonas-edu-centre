@@ -90,7 +90,18 @@ class User extends Authenticatable
 
     public function comments(){
         return $this->hasOne(PrincipalComment::class, 'user_id', 'id');
+    }
 
+    public function scores() {
+        return $this->hasMany(Score::class, 'student_id');
+    }
+
+    public function attendance() {
+        return $this->hasMany(StudentAttendance::class, 'student_id');
+    }
+
+    public function teacherComment() {
+        return $this->hasMany(TeacherComment::class, 'student_id');
     }
 
 }

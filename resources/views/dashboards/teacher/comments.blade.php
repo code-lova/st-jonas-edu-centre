@@ -20,54 +20,68 @@ website name --}}
                 </div>
                 <div class="fs-6 fw-bold text-blue align-self-center ">{{ $title }}</div>
             </div>
-          <!-- Class comment -->
-          <div class="container mt-4">
-                <form action="{{ route('create.teacher.comment') }}" method="POST" class="mb-4">
-                    @csrf
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <select name="session_id" class="form-select" required>
-                                <option value="">Select a session</option>
-                                @foreach($sessions as $session)
-                                    <option value="{{ $session->id }}" {{ old('session_id') == $session->id ? 'selected' : '' }}>{{ $session->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <select name="term_id" class="form-select" required>
-                                <option value="">Select a term</option>
-                                @foreach($terms as $term)
-                                    <option value="{{ $term->id }}" {{ old('term_id') == $term->id ? 'selected' : '' }}>{{ $term->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+            @if ($currentTermSession && $currentTermSession->session)
+                <div class="bg-light text-start px-3 py-2">
+                    <div class="fs-6 fw-semibold">CURRENT - SESSION: {{ $currentTermSession->session->name }}, CURRENT - TERM: {{ $currentTermSession->name }}</div>
+                    <div class="fs-7">Enter comments for Students in the class you are assigned to as class teacher for this current session/term</div>
+                </div>
+            @else
+                <div class="alert alert-warning">
+                    No active term or session is currently set. Please ensure at least one term is created and activated by admin.
+                </div>
+            @endif
+            <!-- Class comment -->
+            <div class="container mt-4">
+                @if($isClassTeacher)
+                    <form action="{{ route('create.teacher.comment') }}" method="POST" class="mb-4">
+                        @csrf
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <select name="session_id" class="form-select" required>
+                                    <option value="">Select a session</option>
+                                    @foreach($sessions as $session)
+                                        <option value="{{ $session->id }}" {{ old('session_id') == $session->id ? 'selected' : '' }}>{{ $session->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select name="term_id" class="form-select" required>
+                                    <option value="">Select a term</option>
+                                    @foreach($terms as $term)
+                                        <option value="{{ $term->id }}" {{ old('term_id') == $term->id ? 'selected' : '' }}>{{ $term->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
 
-                        <div class="col-md-4">
-                            <select name="class_id" id="student" class="form-select" required>
-                                <option value="">Select student class</option>
-                                @foreach($classAssigned as $class)
-                                    <option value="{{ $class->class_id }}" {{ old('class_id') == $class->class_id ? 'selected' : '' }}>{{ $class->class->class_name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                            <div class="col-md-4">
+                                <select name="class_id" id="student" class="form-select" required>
+                                    <option value="">Select your class</option>
+                                    <option value="{{ $classTeacherClass->id }}">{{ $classTeacherClass->class_name }}</option>
+                                </select>
+                            </div>
 
-                        <div class="col-md-4">
-                            <select name="student_id" id="student-select" class="form-select" required>
-                                <option value="">Select a class first</option>
-                            </select>
-                        </div>
+                            <div class="col-md-4">
+                                <select name="student_id" id="student-select" class="form-select" required>
+                                    <option value="">Select a class first</option>
+                                </select>
+                            </div>
 
-                        <div class="col-12">
-                            <textarea name="comment" value="{{ old('comment') }}" id="comments" class="form-control" rows="3" placeholder="Enter your comment here" required></textarea>
-                        </div>
+                            <div class="col-12">
+                                <textarea name="comment" value="{{ old('comment') }}" id="comments" class="form-control" rows="3" placeholder="Enter your comment here" required></textarea>
+                            </div>
 
-                        <input type="hidden" name="teacher_id" value="{{ $teacherId }}">
+                            <input type="hidden" name="teacher_id" value="{{ $teacherId }}">
 
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-secondary">Save Comment</button>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-secondary">Save Comment</button>
+                            </div>
                         </div>
+                    </form>
+                @else
+                    <div class="alert alert-warning">
+                        You are not assigned to a class as a class teacher.
                     </div>
-                </form>
+                @endif
 
                 <div class="table-responsive mt-4">
                     <table class="table table-bordered">

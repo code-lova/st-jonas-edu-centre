@@ -5,12 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Classes extends Model
+class ResultContent extends Model
 {
     use HasFactory;
-    protected $table = 'classes';
-    protected $fillable = ['class_name'];
-
-
-  
+    protected $table = 'result_contents';
+    protected $guarded;
 }

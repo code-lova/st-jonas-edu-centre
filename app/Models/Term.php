@@ -9,7 +9,7 @@ class Term extends Model
 {
     use HasFactory;
     protected $table = 'terms';
-    protected $fillable = ['session_id', 'name', 'start_date', 'end_date'];
+    protected $fillable = ['session_id', 'name', 'start_date', 'end_date', 'status'];
 
     public function session() {
         return $this->belongsTo(Session::class);
@@ -22,4 +22,5 @@ class Term extends Model
     public function scores() {
         return $this->hasMany(Score::class);
     }
+
 }

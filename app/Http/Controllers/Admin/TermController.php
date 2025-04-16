@@ -12,7 +12,8 @@ class TermController extends Controller
 {
     public function index(){
         $data['title'] = "List of Academic Term";
-        $data['term'] = Term::latest()->get();
+        $terms = $data['term'] = Term::latest()->get();
+        $data['noTermActive'] = $terms->count() > 0 && $terms->every(fn ($term) => $term->status == 0);
         $data['sessions'] = Session::all();
         return view('dashboards.admin.term.index', $data);
     }

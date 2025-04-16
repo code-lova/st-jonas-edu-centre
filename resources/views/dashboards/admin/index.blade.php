@@ -7,6 +7,33 @@ website name --}}
 
 @section('content')
 
+<style>
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+
+    }
+    table, th, td {
+        border: 1px solid #ddd;
+    }
+    th, td {
+        padding: 8px;
+        text-align: center;
+    }
+    th {
+        background-color: #f4f4f4;
+    }
+    button {
+        padding: 5px 10px;
+        margin: 2px;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+    }
+
+</style>
+
 <section class="main p-0 col-12  text-red col-md-9  text-center">
     <div class="main-body overflow-auto vh-100">
         <div class="d-flex justify-content-md-center py-2 sticky-top greyish">
@@ -22,6 +49,12 @@ website name --}}
         </div>
         <div class="bg-light vh-100 px-3 rounded" >
             <div class="text-start px-2 py-5">
+                @if ($noTermActive)
+                    <div class="alert alert-warning">
+                        Note: First create a term, then retrun here to activate it below.
+                    </div>
+                @endif
+
               <div class="fs-6 d-flex">
                 Welcome Admin
                      <div class="px-1 fw-semibold">{{ $user->lastname }}</div>
@@ -52,7 +85,7 @@ website name --}}
                         <path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1z" />
                     </svg>
                     <div>
-                        <div id="staffNumbers" class="display-7 text-start fw-semibold">0</div>
+                        <div id="staffNumbers" class="display-7 text-start fw-semibold">{{ $numOfStaff }}</div>
                         <div class="fs-5">Register Staffs</div>
                     </div>
                 </div>
@@ -67,11 +100,50 @@ website name --}}
                             d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466zm-.068 1.873.22-.748 3.496 1.311a.5.5 0 0 0 .352 0l3.496-1.311.22.748L8 12.46z" />
                     </svg>
                     <div>
-                        <div id="studentNumber" class="display-7 text-start fw-semibold">0</div>
+                        <div id="studentNumber" class="display-7 text-start fw-semibold">{{ $numOfStudent }}</div>
                         <div class="fs-5">Register Students</div>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="mt-4">
+            <!-- Table detail -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Session</th>
+                        <th>Term</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="classTableBody">
+                    @forelse ( $term as $k=>$val )
+                        <tr>
+                            <td>{{ ++$k }}</td>
+                            <td>{{ $val->session->name }}</td>
+                            <td>{{ $val->name }}</td>
+                            <td>{{ $val->start_date, date('Y/m/d') }}</td>
+                            <td>{{ $val->end_date,  date('Y/m/d') }}</td>
+                            <td>
+                                @if ($val->status == 0)
+                                    <a href="{{ url('admin/activate-term/'.$val->id) }}" class="btn btn-secondary btn-sm fs-7">Activate</a>
+                                @elseif ($val->status == 1)
+                                    <div class="px-1 fw-semibold" style="color: rgb(22, 109, 22)">Active Term ✅</div>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="text-center">Term has not be created yet</td>
+                        </tr>
+                    @endforelse
+
+                </tbody>
+            </table>
         </div>
 
 

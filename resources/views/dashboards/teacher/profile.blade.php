@@ -19,6 +19,15 @@ website name --}}
                 </div>
                 <div class="fs-6 fw-bold text-blue align-self-center ">{{ $title }}</div>
             </div>
+            @if ($currentTermSession && $currentTermSession->session)
+                <div class="bg-light text-start px-3 py-2">
+                    <div class="fs-6 fw-semibold">CURRENT - SESSION: {{ $currentTermSession->session->name }}, CURRENT - TERM: {{ $currentTermSession->name }}</div>
+                </div>
+            @else
+                <div class="alert alert-warning">
+                    No active term or session is currently set. Please ensure at least one term is created and activated by admin.
+                </div>
+            @endif
             <div class="bg-light px-3 rounded text-blue">
                 <div class="info">
                     <div class="text-start px-2 py-5">

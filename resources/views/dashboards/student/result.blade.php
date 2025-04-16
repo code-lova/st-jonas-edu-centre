@@ -28,14 +28,23 @@ website name --}}
                     <div class="fs-6 fw-semibold ">Avalaible Results</div>
                 </div>
                 <div class="d-grid gap-4">
-                    <div class="bg-green-lighter text-light rounded-1 p-3 text-uppercase text-start">
-                        <div class="fs-6 fw-semibold">Class:<span class="px-2">Jss 1</span></div>
-                        <div class="fs-7">Session: <span class="px-1">2021/2022</span></div>
-                        <div class="fs-7">Term: <span class="px-1">Term</span></div>
-                        <div class="d-grid">
-                            <a href="../result-page/" target="_blank" class="btn btn-primary">view</a>
+                    <form action="{{ route('view.result') }}" method="POST" target="_blank">
+                        @csrf
+                        <input type="hidden" name="class_id" value="{{ $classId }}" required>
+                        <input type="hidden" name="student_id" value="{{ $studentId->id }}" required>
+                        <input type="hidden" name="session_id" value="{{ $currentTermSession->session->id }}" required>
+                        <input type="hidden" name="term_id" value="{{ $currentTermSession->id }}" required>
+
+                        <div class="bg-green-lighter text-light rounded-1 p-3 text-uppercase text-start">
+                            <div class="fs-6 fw-semibold">Class:<span class="px-2">{{ $studentId->currentClassApplying->class_name }}</span></div>
+                            <div class="fs-7">Session: <span class="px-1">{{ $currentTermSession->session->name }}</span></div>
+                            <div class="fs-7">Term: <span class="px-1">{{ $currentTermSession->name }}</span></div>
+                            <div class="d-grid">
+                                <button class="btn btn-primary">view</button>
+                            </div>
                         </div>
-                    </div>
+                    </form>
+
                 </div>
 
 

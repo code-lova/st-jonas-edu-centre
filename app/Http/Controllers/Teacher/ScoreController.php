@@ -17,8 +17,11 @@ class ScoreController extends Controller
 {
     public function create(){
         $data['title'] = "Manage Score";
+        $currentTermSession = Term::with('session')->where('status', '1')->first();
+
         $data['sessions'] = Session::all();
         $data['terms'] = Term::all();
+        $data['currentTermSession'] =$currentTermSession;
         return view('dashboards.teacher.manage-score', $data);
     }
 
@@ -66,7 +69,7 @@ class ScoreController extends Controller
 
 
     public function showScoreForm(Request $request) {
-        
+
         $classId = $request->input('class_id');
         $subjectId = $request->input('subject_id');
         $sessionId = $request->input('session_id');

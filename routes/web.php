@@ -56,6 +56,8 @@ Route::controller(\App\Http\Controllers\Frontend\HomepageController::class)->gro
 //Group Route for Admin Profile
 Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function (){
     Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index']);
+    Route::get('/activate-term/{id}', [\App\Http\Controllers\Admin\DashboardController::class, 'activateTerm']);
+
 
     Route::controller(\App\Http\Controllers\Admin\StudentController::class)->group(function() {
         Route::get('/student-list', 'index')->name('studentlist');
@@ -114,6 +116,13 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function (){
         Route::get('/students-by-class', 'getStudentsByClass')->name('students.by.class');
         Route::post('/comment', 'store')->name('create.comment');
         Route::delete('/delete-comment/{id}', 'destroy');
+
+    });
+
+
+    Route::controller(\App\Http\Controllers\Admin\SettingsController::class)->group(function () {
+        Route::get('/settings', 'index')->name('settings');
+
 
     });
 
@@ -178,6 +187,26 @@ Route::prefix('teacher')->middleware(['auth', 'isTeacher'])->group(function (){
 
     });
 
+    Route::controller(\App\Http\Controllers\Teacher\ResultContentController::class)->group(function (){
+
+        Route::get('/result-content', 'index')->name('result.content');
+
+        Route::post('/result-content', 'saveSettings')->name('save.result.content');
+
+    });
+
+
+    Route::controller(\App\Http\Controllers\Teacher\AttendanceController::class)->group(function (){
+
+        Route::get('/attendance', 'index')->name('attendance');
+
+        Route::post('/attendance', 'store')->name('attendance.store');
+
+        Route::get('/attendance/fetch', 'fetchAttendance')->name('attendance.fetch');
+    });
+
+
+
 
 });
 
@@ -187,11 +216,21 @@ Route::prefix('student')->middleware(['auth', 'isStudent'])->group(function (){
 
     Route::get('/dashboard', [\App\Http\Controllers\Student\DashboardController::class, 'index']);
 
-    Route::get('/result', [\App\Http\Controllers\Student\ResultController::class, 'index'])->name('result');
+    Route::controller(\App\Http\Controllers\Student\ResultController::class)->group(function (){
+
+        Route::get('/result',  'index')->name('result');
+
+        Route::post('/result', 'getStudentResult')->name('view.result');
+    });
+
+
 
     Route::get('/profile', [\App\Http\Controllers\Student\ProfileController::class, 'index'])->name('profile');
 
-    Route::get('/student-fees', [\App\Http\Controllers\Student\ProfileController::class, 'index'])->name('fees');
+    Route::get('/student-fees', [\App\Http\Controllers\Student\ProfileController::class, 'studentFees'])->name('fees');
+
+    Route::get('/holiday-homework', [\App\Http\Controllers\Student\ProfileController::class, 'index'])->name('holiday.assignments');
+
 
 
 });

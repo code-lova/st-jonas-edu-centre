@@ -135,6 +135,11 @@ website name --}}
                 <div class="fs-6 fw-bold text-red align-self-center "> Term Dashboard</div>
             </div>
             <h1>{{ $title }}</h1>
+            @if ($noTermActive)
+                <div class="alert alert-warning">
+                    After creating a term, return to DASHBOARD to activate the current term.
+                </div>
+            @endif
 
             <!-- Create Class Button -->
             <button class="btn btn-secondary btn-sm fs-7 mt-4 mb-4" id="create">Create New term</button>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use App\Models\Term;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,8 +16,10 @@ class ProfileController extends Controller
     public function index(){
 
         $teacherId = auth()->id();
+        $currentTermSession = Term::with('session')->where('status', '1')->first();
 
         $data['title'] = "Profile Settings Dashboard";
+        $data['currentTermSession'] =$currentTermSession;
         $data['profile'] = User::where('id', $teacherId)->where('role', 'teacher')->first();
 
         return view('dashboards.teacher.profile', $data);
