@@ -30,96 +30,99 @@ website name --}}
                     No active term or session is currently set. Please ensure at least one term is created and activated by admin.
                 </div>
             @endif
-            <!-- Class comment -->
-            <div class="container mt-4">
-                @if($isClassTeacher)
-                    <form action="{{ route('create.teacher.comment') }}" method="POST" class="mb-4">
-                        @csrf
-                        <div class="row g-3">
-                            <div class="col-md-4">
-                                <select name="session_id" class="form-select" required>
-                                    <option value="">Select a session</option>
-                                    @foreach($sessions as $session)
-                                        <option value="{{ $session->id }}" {{ old('session_id') == $session->id ? 'selected' : '' }}>{{ $session->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <select name="term_id" class="form-select" required>
-                                    <option value="">Select a term</option>
-                                    @foreach($terms as $term)
-                                        <option value="{{ $term->id }}" {{ old('term_id') == $term->id ? 'selected' : '' }}>{{ $term->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
 
-                            <div class="col-md-4">
-                                <select name="class_id" id="student" class="form-select" required>
-                                    <option value="">Select your class</option>
-                                    <option value="{{ $classTeacherClass->id }}">{{ $classTeacherClass->class_name }}</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-4">
-                                <select name="student_id" id="student-select" class="form-select" required>
-                                    <option value="">Select a class first</option>
-                                </select>
-                            </div>
-
-                            <div class="col-12">
-                                <textarea name="comment" value="{{ old('comment') }}" id="comments" class="form-control" rows="3" placeholder="Enter your comment here" required></textarea>
-                            </div>
-
-                            <input type="hidden" name="teacher_id" value="{{ $teacherId }}">
-
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-secondary">Save Comment</button>
-                            </div>
-                        </div>
-                    </form>
-                @else
-                    <div class="alert alert-warning">
-                        You are not assigned to a class as a class teacher.
-                    </div>
-                @endif
-
-                <div class="table-responsive mt-4">
-                    <table class="table table-bordered">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Student</th>
-                                <th>Session</th>
-                                <th>Term</th>
-                                <th>Comment</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($comments as $val)
-                                <tr>
-                                    <td>{{ $val->student->firstname }} {{ $val->student->lastname }}
-                                        ( {{ $val->student->currentClassApplying->class_name }} )
-                                    </td>
-                                    <td>{{ $val->session->name }}</td>
-                                    <td>{{ $val->term->name }}</td>
-                                    <td>{{ $val->comment }}</td>
-                                    <td>
-                                        <form action="{{ url('teacher/delete-comment/' . $val->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this comment?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @empty
-                            <tr>
-                                <td colspan="8" class="text-center">No Comment Records Available</td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+            @if(!$currentTermSession || !$currentTermSession->session)
+                <div class="alert alert-warning">
+                    No active term and session set by the admin Yet.
                 </div>
-            </div>
+            @else
+                <!-- Class comment -->
+                <div class="container mt-4">
+                    @if($isClassTeacher)
+                        <form action="{{ route('create.teacher.comment') }}" method="POST" class="mb-4">
+                            @csrf
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <select name="session_id" class="form-select" required>
+                                        <option value="">Select a session</option>
+                                        <option value="{{ $currentTermSession->session->id }}" {{ old('session_id') == $currentTermSession->session->id ? 'selected' : '' }}>{{ $currentTermSession->session->name }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select name="term_id" class="form-select" required>
+                                        <option value="">Select a term</option>
+                                        <option value="{{ $currentTermSession->id }}" {{ old('term_id') == $currentTermSession->id ? 'selected' : '' }}>{{ $currentTermSession->name }}</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <select name="class_id" id="student" class="form-select" required>
+                                        <option value="">Select your class</option>
+                                        <option value="{{ $classTeacherClass->id }}">{{ $classTeacherClass->class_name }}</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <select name="student_id" id="student-select" class="form-select" required>
+                                        <option value="">Select a class first</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-12">
+                                    <textarea name="comment" value="{{ old('comment') }}" id="comments" class="form-control" rows="3" placeholder="Enter your comment here" required></textarea>
+                                </div>
+
+                                <input type="hidden" name="teacher_id" value="{{ $teacherId }}">
+
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-secondary">Save Comment</button>
+                                </div>
+                            </div>
+                        </form>
+                    @else
+                        <div class="alert alert-warning">
+                            You are not assigned to a class as a class teacher.
+                        </div>
+                    @endif
+
+                    <div class="table-responsive mt-4">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Session</th>
+                                    <th>Term</th>
+                                    <th>Comment</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($comments as $val)
+                                    <tr>
+                                        <td>{{ $val->student->firstname }} {{ $val->student->lastname }}
+                                            ( {{ $val->student->currentClassApplying->class_name }} )
+                                        </td>
+                                        <td>{{ $val->session->name }}</td>
+                                        <td>{{ $val->term->name }}</td>
+                                        <td>{{ $val->comment }}</td>
+                                        <td>
+                                            <form action="{{ url('teacher/delete-comment/' . $val->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                <tr>
+                                    <td colspan="8" class="text-center">No Comment Records Available</td>
+                                </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endif
         </div>
     </section>
 

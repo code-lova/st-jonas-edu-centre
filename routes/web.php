@@ -107,6 +107,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function (){
     Route::controller(\App\Http\Controllers\Admin\TermController::class)->group(function () {
         Route::get('/term', 'index')->name('termlist');
         Route::post('/term', 'store')->name('create.term');
+        Route::post('/term/update', 'update')->name('update.term');
         Route::delete('/term/delete/{id}', 'destroy');
 
     });
@@ -122,7 +123,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function (){
 
     Route::controller(\App\Http\Controllers\Admin\SettingsController::class)->group(function () {
         Route::get('/settings', 'index')->name('settings');
-
+        Route::post('/settings', 'store')->name('settings.store');
 
     });
 

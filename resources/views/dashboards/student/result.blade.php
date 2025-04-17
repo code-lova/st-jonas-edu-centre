@@ -24,29 +24,48 @@ website name --}}
             <!-- if there is any available result to view show the below card -->
 
             <div class="bg-light full-height px-3 rounded">
-                <div class="text-start px-2 py-5">
-                    <div class="fs-6 fw-semibold ">Avalaible Results</div>
-                </div>
-                <div class="d-grid gap-4">
-                    <form action="{{ route('view.result') }}" method="POST" target="_blank">
-                        @csrf
-                        <input type="hidden" name="class_id" value="{{ $classId }}" required>
-                        <input type="hidden" name="student_id" value="{{ $studentId->id }}" required>
-                        <input type="hidden" name="session_id" value="{{ $currentTermSession->session->id }}" required>
-                        <input type="hidden" name="term_id" value="{{ $currentTermSession->id }}" required>
+                @if ($settings && $settings->open_result == 0)
+                    <div class="text-start px-2 py-5">
+                        <div class="fs-6 fw-semibold" style="color: rgb(189, 10, 10)">Result is unavailable at the moment</div>
+                    </div>
+                @else
+                    <div class="text-start px-2 py-5">
+                        <div class="fs-6 fw-semibold ">Avalaible Results</div>
+                    </div>
+                @endif
 
-                        <div class="bg-green-lighter text-light rounded-1 p-3 text-uppercase text-start">
-                            <div class="fs-6 fw-semibold">Class:<span class="px-2">{{ $studentId->currentClassApplying->class_name }}</span></div>
-                            <div class="fs-7">Session: <span class="px-1">{{ $currentTermSession->session->name }}</span></div>
-                            <div class="fs-7">Term: <span class="px-1">{{ $currentTermSession->name }}</span></div>
-                            <div class="d-grid">
-                                <button class="btn btn-primary">view</button>
+                @if(!$currentTermSession || !$currentTermSession->session)
+                    <div class="alert alert-warning">
+                        No active term and session set by the admin Yet.
+                    </div>
+                @else
+                    <div class="d-grid gap-4">
+                        <form action="{{ route('view.result') }}" method="POST" target="_blank">
+                            @csrf
+                            <input type="hidden" name="class_id" value="{{ $classId }}" required>
+                            <input type="hidden" name="student_id" value="{{ $studentId->id }}" required>
+                            <input type="hidden" name="session_id" value="{{ $currentTermSession->session->id }}" required>
+                            <input type="hidden" name="term_id" value="{{ $currentTermSession->id }}" required>
+
+                            <div class="bg-green-lighter text-light rounded-1 p-3 text-uppercase text-start">
+                                <div class="fs-6 fw-semibold">Class:<span class="px-2">{{ $studentId->currentClassApplying->class_name }}</span></div>
+                                <div class="fs-7">Session: <span class="px-1">{{ $currentTermSession->session->name }}</span></div>
+                                <div class="fs-7">Term: <span class="px-1">{{ $currentTermSession->name }}</span></div>
+                                @if ($settings && $settings->open_result == 0)
+                                <div class="d-grid">
+                                    <p></p>
+                                </div>
+                                @else
+                                    <div class="d-grid">
+                                        <button class="btn btn-primary">View Result</button>
+                                    </div>
+                                @endif
+
                             </div>
-                        </div>
-                    </form>
+                        </form>
 
-                </div>
-
+                    </div>
+                @endif
 
             </div>
         </div>

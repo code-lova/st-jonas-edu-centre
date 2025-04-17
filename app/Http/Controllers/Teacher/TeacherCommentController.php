@@ -46,7 +46,12 @@ class TeacherCommentController extends Controller
 
         //$data['classAssigned'] = $assignments;
 
-        $data['comments'] = TeacherComment::where('teacher_id', $teacherId)->where('class_id', $classTeacherClass->id)->latest()->get();
+        // More cleaner and opimised query
+        $data['comments'] = TeacherComment::where([
+            ['teacher_id', '=', $teacherId],
+            ['term_id', '=', $currentTermSession->id],
+            ['session_id', '=', $currentTermSession->session->id],
+        ])->latest()->get();
         return view('dashboards.teacher.comments', $data);
     }
 

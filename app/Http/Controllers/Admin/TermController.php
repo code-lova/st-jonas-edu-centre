@@ -15,6 +15,7 @@ class TermController extends Controller
         $terms = $data['term'] = Term::latest()->get();
         $data['noTermActive'] = $terms->count() > 0 && $terms->every(fn ($term) => $term->status == 0);
         $data['sessions'] = Session::all();
+        $data['terms'] = Term::all();
         return view('dashboards.admin.term.index', $data);
     }
 
@@ -58,6 +59,29 @@ class TermController extends Controller
 
         return redirect()->back()->with('message', 'Term created successfully!');
     }
+
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:terms,id',
+            'session_id' => 'required|exists:sessions,id',
+            'name' => 'required|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $term = Term::findOrFail($request->id);
+        $term->update([
+            'session_id' => $request->session_id,
+            'name' => $request->name,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+        ]);
+
+        return redirect()->back()->with('message', 'Term updated successfully!');
+    }
+
 
 
 

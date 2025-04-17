@@ -26,7 +26,7 @@ website name --}}
             <div class="col-md-3 col-12  d-flex flex-column align-items-start justify-content-center border-1 mt-md-0 mt-1 ">
                 <p class="   text-capitalize" id="studentName">Name: {{ $student->firstname }} {{ $student->middlename ?? '' }} {{ $student->lastname }}</p>
                 <p class="   text-capitalize" id="session">session: {{ $termSession->session->name }}</p>
-                <p class="   text-capitalize" id="schoolOpen">school opened: {{ \Carbon\Carbon::parse($termSession->start_date)->translatedFormat('D, d M Y') }}</p>
+                <p class="   text-capitalize" id="schoolOpen">school open: {{ $schoolOpens }}</p>
             </div>
             <div class="col-md-3 col-12 d-flex flex-column align-items-start justify-content-center border-1">
                 <p class=" text-center  text-capitalize" id="studentClass">class: {{ $student->currentClassApplying->class_name }}</p>
@@ -34,7 +34,7 @@ website name --}}
                 <p class=" text-center  text-capitalize" id="timesPresent">Times persent: {{ $student->attendance->first()->times_present ?? 0 }}</p>
             </div>
             <div class="col-md-3 col-12 d-flex flex-column align-items-start justify-content-center border-1">
-                <p class=" text-center  text-capitalize" id="termEnds">Term ends: {{ \Carbon\Carbon::parse($termSession->end_date)->translatedFormat('D, d M Y') }}</p>
+                <p class=" text-center  text-capitalize" id="termEnds">Term ends: {{ \Carbon\Carbon::parse($termEnd)->translatedFormat('D, d M Y') }}</p>
                 <p class="   text-capitalize" id="numberInClass">No. in class: {{ $numInClass }}</p>
                 <p class=" text-center  text-capitalize" id="studentPosition">position: {{ $position }}</p>
             </div>
@@ -84,7 +84,7 @@ website name --}}
         <!-- Techers and Principal remark -->
         <div class="remark d-flex justify-content-between ">
             <div class="remark-content m-2 ">
-                <p id="nextTermBegin">Next Term Begins: {{ \Carbon\Carbon::parse($nextTermStart)->translatedFormat('D, d M Y') }}</p>
+                <p id="nextTermBegin">Next Term Begins: {{ \Carbon\Carbon::parse($nextTermResums)->translatedFormat('D, d M Y') }}</p>
                 <p id="classTeacherName">Class Teacher's Name: {{ $teacherName->firstname }} {{ $teacherName->middlename ?? '' }} {{ $teacherName->lastname }} </p>
                 <p id="classTecherRemark">Class Teacher's Remark: {{ $student->teacherComment->first()->comment ?? 'N/A' }}.</p>
                 <p id="principalRemark">Principal's Remark: {{ $student->comments->first()->comment ?? 'N/A' }}</p>
@@ -92,7 +92,7 @@ website name --}}
             </div>
 
             <div class="principal-signature m-2 border-3  d-md-flex align-items-center d-none ">
-                <img src="./st jonas.jpg" alt="Principal Signature image" srcset="">
+                <img src="{{ asset('uploads/'.$principalSignature) }}" alt="Principal Signature image" srcset="">
             </div>
         </div>
 

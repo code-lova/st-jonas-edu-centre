@@ -22,43 +22,38 @@ website name --}}
             </div>
             <div class="fs-6 fw-bold text-blue align-self-center ">{{ $title }}</div>
           </div>
-            @if ($currentTermSession && $currentTermSession->session)
-                <div class="bg-light text-start px-3 py-2">
-                    <div class="fs-6 fw-semibold">CURRENT - SESSION: {{ $currentTermSession->session->name }}, CURRENT - TERM: {{ $currentTermSession->name }}</div>
-                    <div class="fs-7">Enter/Modify Score for Students in the class you teach this current session/term</div>
-                </div>
-            @else
-                <div class="alert alert-warning">
-                    No active term or session is currently set. Please ensure at least one term is created and activated by admin.
-                </div>
-            @endif
+
           <div class="bg-light text-blue full-height px-3 rounded">
             <div class="text-start px-2 py-5">
               <div class="fs-6 fw-semibold">Select Session and Term</div>
               <div class="fs-7">Choose the session and term to enter/modify scores for students.</div>
             </div>
-            <form id="select-session-term-form"  action="{{ route('teacher.handle.session_term') }}" method="POST">
-                @csrf
-              <div class="form-group">
-                <label for="session_id" class="form-label">Session</label>
-                <select name="session_id" id="session" class="form-control w-100 ">
-                    <option value="">Select a session</option>
-                    @foreach($sessions as $session)
-                        <option value="{{ $session->id }}" {{ old('session_id') == $session->id ? 'selected' : '' }}>{{ $session->name }}</option>
-                    @endforeach
-                </select>
-              </div>
-              <div class="form-group mt-3">
-                <label for="term_id" class="form-label">Term</label>
-                <select name="term_id" id="term" class="form-control w-100">
-                    <option value="">Select a term</option>
-                    @foreach($terms as $term)
-                        <option value="{{ $term->id }}" {{ old('term_id') == $term->id ? 'selected' : '' }}>{{ $term->name }}</option>
-                    @endforeach
-                </select>
-              </div>
-              <button type="submit" class="btn btn-secondary mt-3">Proceed</button>
-            </form>
+            @if(!$currentTermSession || !$currentTermSession->session)
+                <div class="alert alert-warning">
+                    No active term and session set by the admin Yet.
+                </div>
+            @else
+                <form id="select-session-term-form"  action="{{ route('teacher.handle.session_term') }}" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="session_id" class="form-label">Session</label>
+                        <select name="session_id" id="session" class="form-control w-100 ">
+                            <option value="">Select a session</option>
+                            <option value="{{ $currentTermSession->session->id }}" {{ old('session_id') == $currentTermSession->session->id ? 'selected' : '' }}>{{ $currentTermSession->session->name }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group mt-3">
+                        <label for="term_id" class="form-label">Term</label>
+                        <select name="term_id" id="term" class="form-control w-100">
+                            <option value="">Select a term</option>
+
+                            <option value="{{ $currentTermSession->id }}" {{ old('term_id') == $currentTermSession->id ? 'selected' : '' }}>{{ $currentTermSession->name }}</option>
+
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-secondary mt-3">Proceed</button>
+                </form>
+            @endif
           </div>
         </div>
     </section>

@@ -32,77 +32,71 @@ website name --}}
                 </div>
             @endif
 
-            <!-- Class comment -->
-            <div class="container mt-4">
-                @if ($isClassTeacher)
+            @if(!$currentTermSession || !$currentTermSession->session)
+            <div class="alert alert-warning">
+                No active term and session set by the admin Yet.
+            </div>
+            @else
+                <!-- Class comment -->
+                <div class="container mt-4">
+                    @if ($isClassTeacher)
 
-                <form action="{{ route('attendance.store') }}" method="POST" class="mb-4">
-                    @csrf
+                        <form action="{{ route('attendance.store') }}" method="POST" class="mb-4">
+                            @csrf
 
-                    <input type="hidden" name="teacher_id" value="{{ $teacherId }}">
-                    <input type="hidden" name="class_id" value="{{ $classTeacherClass->id }}">
+                            <input type="hidden" name="teacher_id" value="{{ $teacherId }}">
+                            <input type="hidden" name="class_id" value="{{ $classTeacherClass->id }}">
 
 
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-4">
-                            <select name="session_id" class="form-select" required>
-                                <option value="">Select a session</option>
-                                @foreach($sessions as $session)
-                                    <option value="{{ $session->id }}" {{ old('session_id') == $session->id ? 'selected' : '' }}>{{ $session->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <select name="term_id" class="form-select" required>
-                                <option value="">Select a term</option>
-                                @foreach($terms as $term)
-                                    <option value="{{ $term->id }}" {{ old('term_id') == $term->id ? 'selected' : '' }}>{{ $term->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row g-3">
-
-                        @foreach ($studentsUnderClassteacher as $val)
-
-                        <input type="hidden" name="student_id[]" value="{{ $val->id }}">
-
-                        <!-- Student 1 -->
-                        <div class="col-md-4">
-                            <div class="text-blue px-2 text-uppercase text-start student-score-entry border p-2 rounded">
-                                <div id="student-name" class="pt-2 fs-6">
-                                    {{ $val->firstname }}{{ $val->middlename ?? '' }} {{ $val->lastname }}
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-4">
+                                    <select name="session_id" class="form-select" required>
+                                        <option value="">Select a session</option>
+                                        <option value="{{ $currentTermSession->session->id }}" {{ old('session_id') == $currentTermSession->session->id ? 'selected' : '' }}>{{ $currentTermSession->session->name }}</option>
+                                    </select>
                                 </div>
-                                <div class="fs-7">
-                                    <span class="px-1">|</span><span>{{ $val->sex }}</span>
-                                </div>
-                                <div class="my-1">
-                                    <label for="attendance" class="text-capitalize fs-9 form-label">Number of times present</label>
-                                    <input type="number" class="form-control form-control-sm attendance-input" name="times_present[]"
-                                    required
-                                />
+                                <div class="col-md-4">
+                                    <select name="term_id" class="form-select" required>
+                                        <option value="">Select a term</option>
+                                        <option value="{{ $currentTermSession->id }}" {{ old('term_id') == $currentTermSession->id ? 'selected' : '' }}>{{ $currentTermSession->name }}</option>
+                                    </select>
                                 </div>
                             </div>
+                            <div class="row g-3">
+                                @foreach ($studentsUnderClassteacher as $val)
+                                    <input type="hidden" name="student_id[]" value="{{ $val->id }}">
+
+                                    <!-- Student 1 -->
+                                    <div class="col-md-4">
+                                        <div class="text-blue px-2 text-uppercase text-start student-score-entry border p-2 rounded">
+                                            <div id="student-name" class="pt-2 fs-6">
+                                                {{ $val->firstname }}{{ $val->middlename ?? '' }} {{ $val->lastname }}
+                                            </div>
+                                            <div class="fs-7">
+                                                <span class="px-1">|</span><span>{{ $val->sex }}</span>
+                                            </div>
+                                            <div class="my-1">
+                                                <label for="attendance" class="text-capitalize fs-9 form-label">Number of times present</label>
+                                                <input type="number" class="form-control form-control-sm attendance-input" name="times_present[]"
+                                                required
+                                            />
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            <div class="col-12 my-5">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    @else
+                        <div class="alert alert-warning">
+                            You are not assigned to a class as a class teacher.
                         </div>
-                        @endforeach
+                    @endif
 
-
-                    </div>
-
-                    <div class="col-12 my-5">
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
-                </form>
-
-                @else
-                    <div class="alert alert-warning">
-                        You are not assigned to a class as a class teacher.
-                    </div>
-                @endif
-
-            </div>
-
+                </div>
+            @endif
         </div>
     </section>
 

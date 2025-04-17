@@ -166,6 +166,15 @@ website name --}}
                             <td>{{ $val->start_date, date('Y/m/d') }}</td>
                             <td>{{ $val->end_date,  date('Y/m/d') }}</td>
                             <td>
+
+                                <button class="btn btn-secondary btn-sm edit-term"
+                                    data-id="{{ $val->id }}"
+                                    data-session="{{ $val->session->id }}"
+                                    data-name="{{ $val->name }}"
+                                    data-start="{{ $val->start_date }}"
+                                    data-end="{{ $val->end_date }}">
+                                    Edit
+                                </button>
                                 <button disabled class="btn btn-secondary btn-sm fs-7 delete" data-id="{{ $val->id }}">Delete</button>
                             </td>
                         </tr>
@@ -178,7 +187,7 @@ website name --}}
                 </tbody>
             </table>
 
-            <!-- Create session Modal -->
+            <!-- Create term Modal -->
             <div id="createModal" class="class-modal">
                 <div class="modal-content">
                     <span class="close" id="closeCreateModal">&times;</span>
@@ -212,6 +221,42 @@ website name --}}
                 </div>
             </div>
 
+            <!-- Edit Modal -->
+            <div id="editModal" class="class-modal">
+                <div class="modal-content">
+                    <span class="close" id="closeEdit">&times;</span>
+                    <h2>Edit Term</h2>
+                    <form id="editForm" action="{{ route('update.term') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="id" id="editId">
+                        <label>Session:</label>
+                        <select name="session_id" id="editSession" class="form-select" required>
+                            <option value="">Select Session</option>
+                            @foreach ($sessions as $session)
+                            <option value="{{ $session->id }}">{{ $session->name }} Session</option>
+                            @endforeach
+                        </select>
+                        <br>
+
+                        <label class="">Term Name:</label>
+                        <select name="name" id="editName" class="form-select mb-3" required>
+                            <option value="">Select Term</option>
+                            @foreach ($terms as $term)
+                                <option value="{{ $term->name }}">{{ $term->name }}</option>
+                            @endforeach
+                        </select>
+
+                        <label>Start Date:</label>
+                        <input type="date" name="start_date" class="form-select" id="editStartDate" required>
+                        <br>
+                        <label>End Date:</label>
+                        <input type="date" name="end_date" class="form-select" id="editEndDate" required>
+
+                        <button type="submit">Update Term</button>
+                    </form>
+                </div>
+            </div>
+
 
         </div>
     </section>
@@ -227,13 +272,40 @@ website name --}}
         const createBtn = document.getElementById("create");
         const deleteBtn = document.querySelectorAll(".delete");
 
+        const editModal = document.getElementById("editModal");
+        const closeEdit = document.getElementById("closeEdit");
+        const editForm = document.getElementById("editForm");
+
+
         // Get close buttons
         const closeCreateModal = document.getElementById("closeCreateModal");
 
+        // Close Edit Modal
+        closeEdit.addEventListener("click", () => { editModal.style.display = "none"; });
 
         // Open create modal
         createBtn.addEventListener("click", function () {
             createModal.style.display = "block";
+        });
+
+         // Handle edit button clicks
+        document.querySelectorAll(".edit-term").forEach(button => {
+            button.addEventListener("click", () => {
+                const id = button.getAttribute("data-id");
+                const name = button.getAttribute("data-name");
+                const session = button.getAttribute("data-session");
+                const start = button.getAttribute("data-start");
+                const end = button.getAttribute("data-end");
+
+                // Populate edit form
+                document.getElementById("editId").value = id;
+                document.getElementById("editName").value = name;
+                document.getElementById("editSession").value = session;
+                document.getElementById("editStartDate").value = start;
+                document.getElementById("editEndDate").value = end;
+
+                editModal.style.display = "block";
+            });
         });
 
 
@@ -268,6 +340,7 @@ website name --}}
             if (event.target === createModal) {
                 createModal.style.display = "none";
             }
+            if (event.target == editModal) editModal.style.display = "none";
         });
     });
 </script>

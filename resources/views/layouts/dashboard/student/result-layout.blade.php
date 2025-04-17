@@ -7,6 +7,9 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        @php
+            $settings = App\Models\Settings::find(1);
+        @endphp
 
         <!--styles -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -62,15 +65,15 @@
         <div class="result-header  d-flex row mt-2 ">
             <!-- school logo -->
             <div class="col-md-3 d-none d-md-flex align-items-center justify-content-center">
-                <img src="{{ asset('assets/st-jonas-logo.jpg') }}" alt="School logo" srcset="" class="border-3 border-dark">
+                @if($settings)<img src="{{ asset('uploads/'.$settings->site_logo) }}" alt="School logo" srcset="" class="border-3 border-dark">@endif
 
             </div>
             <!-- school name and address-->
             <div class=" col-12 col-md-6 text text-center">
-                <h1 class="text-uppercase fs-2  text-green pt-md-4 pt-2">st. jonas educational center</h1>
-                <p>3, SCHOOL LANE BEHIND ASCON PETROL STATION, BENIN-AUCHI ROAD BENIN CITY.</p>
-                <p>+234 9065107853</p>
-                <p>School@gmail.com</p>
+                <h1 class="text-uppercase fs-2  text-green pt-md-4 pt-2">@if($settings){{ $settings->site_name }}@endif</h1>
+                <p>@if($settings){{ $settings->address }}@endif</p>
+                <p>@if($settings){{ $settings->mobile }}@endif</p>
+                <p>@if($settings){{ $settings->email }}@endif</p>
 
             </div>
             <div class="col-md-3 d-none  bg-dark-subtle"></div>

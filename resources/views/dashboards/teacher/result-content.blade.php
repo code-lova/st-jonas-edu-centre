@@ -42,7 +42,7 @@ website name --}}
                             <!-- School Open  -->
                             <div class="my-1 col-12 col-md-4 text-start">
                                 <label for="schoolOpen" class="text-capitalize fs-9 form-label">School Open</label>
-                                <input type="date" name="school_open" id="school_open"  @if($settings)value="{{ $settings->school_open }}" @endif placeholder="School Open" class="form-control form-control-sm" required />
+                                <input type="text" name="school_open" id="school_open" readonly  @if($settings)value="{{ $settings->school_open }}" @endif placeholder="School Open" class="form-control form-control-sm" required />
                                 @error('school_open')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
@@ -50,29 +50,30 @@ website name --}}
                             <!-- Number in Class  -->
                             <div class="my-1 col-12 col-md-4 text-start">
                                 <label for="numberInClass" class="text-capitalize fs-9 form-label">Number in class</label>
-                                <input type="Number" required name="number_in_class" @if($settings)value="{{ $settings->number_in_class }}" @endif id="number_in_class" placeholder="Numbers in class" class="form-control form-control-sm" />
+                                <input type="Number" required name="number_in_class" @if($resultContent)value="{{ $resultContent->number_in_class }}" @endif id="number_in_class" placeholder="Numbers in class" class="form-control form-control-sm" />
                                 @error('number_in_class')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
-                            <!-- Term End  -->
+                            <!-- Next Term Begin  -->
                             <div class="my-1 col-12 col-md-4 text-start">
-                                <label for="termEnd" class="text-capitalize fs-9 form-label">Term End</label>
-                                <input type="date" name="term_ends" id="termEnd" value="{{ $currentTermSession->end_date ?? '' }}" class="form-control form-control-sm" required />
-                                @error('term_ends')
+                                <label for="termStart" class="text-capitalize fs-9 form-label">Term Begin</label>
+                                <input type="date" id="termStart" readonly name="term_begins" @if($settings)value="{{ $settings->term_begins }}" @endif class="form-control form-control-sm" required />
+                                @error('term_begins')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+
                         </div>
 
                         <!-- Next Term Begin and Class teacher Name  -->
                         <div class="row g-3 my-4">
 
-                            <!-- Next Term Begin  -->
+                            <!-- Term End  -->
                             <div class="my-1 col-12 col-md-4 text-start">
-                                <label for="termStart" class="text-capitalize fs-9 form-label">Next Term Begin</label>
-                                <input type="date" id="termStart" name="term_begins" @if($settings)value="{{ $settings->term_begins }}" @endif class="form-control form-control-sm" required />
-                                @error('term_begins')
+                                <label for="termEnd" class="text-capitalize fs-9 form-label">Term End</label>
+                                <input type="date" name="term_ends" readonly id="termEnd" @if($settings)value="{{ $settings->term_ends }}" @endif class="form-control form-control-sm" required />
+                                @error('term_ends')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
@@ -89,7 +90,7 @@ website name --}}
                             <!-- Class Teacher Name -->
                             <div class="my-1 col-12 col-md-4 text-start">
                                 <label for="tecaherName" class="text-capitalize fs-9 form-label">Directors Name</label>
-                                <input type="text" name="directors_name" @if($settings)value="{{ $settings->directors_name }}" @endif placeholder="Directors name" class="form-control form-control-sm" required />
+                                <input type="text" name="directors_name" readonly @if($settings)value="{{ $settings->directors_name }}" @endif placeholder="Directors name" class="form-control form-control-sm" required />
                                 @error('directors_name')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror

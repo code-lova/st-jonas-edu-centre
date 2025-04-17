@@ -7,6 +7,39 @@ website name --}}
 
 @section('content')
 
+<style>
+
+    select {
+        border: 1px solid #15151558;
+    }
+    option{
+        padding: .2rem;
+        color: #151515c1;
+    }
+
+    .form-check-input {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #650018;
+        border-radius: 5px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .form-check-input:checked {
+        background-color: #650018;
+        border-color: #650018;
+    }
+
+    .form-check-input:disabled {
+        background-color: #ccc;
+        border-color: #999;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+
+</style>
     <!-- this is the end of the mobile view -->
     <section class="main p-0 col-12  text-red col-md-9  text-center">
         <div class="main-body overflow-auto vh-100">
@@ -19,213 +52,199 @@ website name --}}
                             d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
                     </svg>
                 </div>
-                <div class="fs-6 fw-bold text-red align-self-center ">Register Student</div>
+                <div class="fs-6 fw-bold text-red align-self-center ">{{ $title }}</div>
             </div>
             <div class="bg-light px-3 rounded text-red">
-                <form action="">
+                <form action="{{ route('settings.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
                     <div class="row pb-2">
-                        <!-- first name  -->
+                        <!-- App name  -->
                         <div class="my-1 col-12 col-md-4 text-start">
-                            <label for="firstname" class="text-capitalize fs-9 form-label">Firstname</label>
-                            <input type="text" id="firstname" placeholder="Firstname"
+                            <label for="firstname" class="text-capitalize fs-9 form-label">Application Name</label>
+                            <input type="text" id="site_name" name="site_name"  value="{{ old('site_name', isset($settings) ? $settings->site_name : '') }}" placeholder="App Name"
                                 class="form-control form-control-sm" required />
+                            @error('site_name')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
-                        <!-- middle name  -->
+                        <!-- app title  -->
                         <div class="my-1 col-12 col-md-4 text-start">
-                            <label for="middlename" class="text-capitalize fs-9 form-label">Middle Name</label>
-                            <input type="text" id="middlename" placeholder="Middle Name"
+                            <label for="middlename" class="text-capitalize fs-9 form-label">Application Title</label>
+                            <input type="text" name="title" id="title" value="{{ old('title', isset($settings) ? $settings->title : '') }}" placeholder="App title"
                                 class="form-control form-control-sm" />
+                            @error('title')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
-                        <!-- last name  -->
+                        <!-- app email  -->
                         <div class="my-1 col-12 col-md-4 text-start">
-                            <label for="lastname" class="text-capitalize fs-9 form-label">Last Name</label>
-                            <input type="text" id="lastname" placeholder="Last Name"
+                            <label for="lastname" class="text-capitalize fs-9 form-label">Application Email</label>
+                            <input type="text" name="email" id="email" value="{{ old('email', isset($settings) ? $settings->email : '') }}" placeholder="App Email"
                                 class="form-control form-control-sm" required />
+                            @error('email')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
-                        <!-- gender  -->
+                        <!-- open result  -->
                         <div class="my-1 col-12 col-md-4 text-start">
-                            <div class="fs-7 pe-5" >Sex</div>
+                            <div class="fs-7 pe-5">Open result</div>
                             <div class="d-flex gap-5 py-1">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="sex" id="sex-male">
-                                    <label class="form-check-label fs-9" for="sex-male">
-                                        Male
+                                    <input class="form-check-input" type="radio" name="open_result" value="1"
+                                        {{ old('open_result', $settings->open_result ?? '0') == '1' ? 'checked' : '' }}>
+                                    <label class="form-check-label fs-9" for="open_result_yes">
+                                        YES
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="sex" id="sex-female"
-                                        checked>
-                                    <label class="form-check-label fs-9" for="sex-female">
-                                        Female
+                                    <input class="form-check-input" type="radio" name="open_result" value="0"
+                                        {{ old('open_result', $settings->open_result ?? '0') == '0' ? 'checked' : '' }}>
+                                    <label class="form-check-label fs-9" for="open_result_no">
+                                        NO
                                     </label>
                                 </div>
                             </div>
                         </div>
-                        <!-- date of birth  -->
+                        <!-- sch open  -->
                         <div class="my-1 col-12 col-md-4 text-start">
-                            <label for="dateofbirth" class="text-capitalize fs-9 form-label">Date of
-                                birth</label>
-                            <input type="date" id="dateofbirth" value="2024-01-01"
+                            <label for="school_open" class="text-capitalize fs-9 form-label">School Opens</label>
+                            <input type="text" id="school_open" name="school_open" value="{{ old('school_open', isset($settings) ? $settings->school_open : '') }}"
                                 class="form-control form-control-sm" required />
+                            @error('school_open')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
-                        <!-- profile photo  -->
                         <div class="my-1 col-12 col-md-4 text-start">
-                            <label for="passport" class="text-capitalize fs-9 form-label">Passport </label>
-                            <input type="file" id="passport" class="form-control form-control-sm" />
+                            <label for="next_term_resumption_date" class="text-capitalize fs-9 form-label">Next Term Resumption Date</label>
+                            <input type="date" id="next_term_resumption_date" name="next_term_resumption_date" value="{{ old('next_term_resumption_date', isset($settings) ? $settings->next_term_resumption_date : '') }}"
+                                class="form-control form-control-sm" required />
+                            @error('next_term_resumption_date')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
-                        <!-- place of birth  -->
-                        <div class="my-1 col-12 text-start">
-                            <label for="PlaceOfBirth" class="text-capitalize fs-9 form-label">Place Of
-                                Birth</label>
-                            <input type="text" id="PlaceOfBirth" placeholder="Place Of Birth"
-                                class="form-control form-control-sm" />
-                        </div>
-                        <!-- blood group  -->
+
                         <div class="my-1 col-12 col-md-4 text-start">
-                            <label for="bloodgroup" class="text-capitalize fs-9 form-label">Blood
-                                Group</label>
-                            <input type="text" id="bloodgroup" placeholder="Blood Group"
-                                class="form-control form-control-sm" />
+                            <label for="term_begins" class="text-capitalize fs-9 form-label">Term Begins</label>
+                            <input type="date" id="term_begins" name="term_begins" value="{{ old('term_begins', isset($settings) ? $settings->term_begins : '') }}"
+                                class="form-control form-control-sm" required />
+                            @error('term_begins')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
-                        <!-- genotype  -->
                         <div class="my-1 col-12 col-md-4 text-start">
-                            <label for="genotype" class="text-capitalize fs-9 form-label">Genotype</label>
-                            <input type="text" id="genotype" placeholder="Genotype"
-                                class="form-control form-control-sm"/>
+                            <label for="term_ends" class="text-capitalize fs-9 form-label">Term Ends</label>
+                            <input type="date" id="term_ends" name="term_ends" value="{{ old('term_ends', isset($settings) ? $settings->term_ends : '') }}"
+                                class="form-control form-control-sm" required />
+                            @error('term_ends')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
+                        <!-- site logo  -->
+                        <div class="my-1 col-12 col-md-4 text-start">
+                            <label for="site_logo" class="text-capitalize fs-9 form-label">Site Logo </label>
+                            <input type="file" id="site_logo" name="site_logo" class="form-control form-control-sm" />
+                            @error('site_logo')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <!-- principal signature  -->
+                        <div class="my-1 col-12 col-md-4 text-start">
+                            <label for="principal_signature" class="text-capitalize fs-9 form-label">Principal Signature </label>
+                            <input type="file" id="principal_signature" name="principal_signature" class="form-control form-control-sm" />
+                            @error('principal_signature')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                         <!-- blood group  -->
+                         <div class="my-1 col-12 col-md-4 text-start">
+                            <label for="mobile" class="text-capitalize fs-9 form-label">App Mobile</label>
+                            <input type="text" id="mobile" name="mobile"  value="{{ old('mobile', isset($settings) ? $settings->mobile : '') }}" placeholder="app mobile"
+                                class="form-control form-control-sm" required />
+                            @error('mobile')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <!-- site desc  -->
+                        <div class="my-1 col-12 col-md-6 text-start">
+                            <label for="site_description" class="text-capitalize fs-9 form-label">Meta Description</label>
+                            <textarea name="site_description" id="site_description" class="form-control form-control-sm" cols="10" rows="6" required>
+                                {{ old('site_description', isset($settings) ? $settings->site_description : '') }}
+                            </textarea>
+                            @error('site_description')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+                         <!-- site keywords  -->
+                         <div class="my-1 col-12 col-md-6 text-start">
+                            <label for="keywords" class="text-capitalize fs-9 form-label">Meta Keywords</label>
+                            <textarea name="keywords" id="keywords" class="form-control form-control-sm" style="text-align: left;" cols="10" rows="6" required>
+                                {{ old('keywords', isset($settings) ? $settings->keywords : '') }}
+                            </textarea>
+                            @error('keywords')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
+
+                        <!-- dir name  -->
+                        <div class="my-1 col-12 col-md-4 text-start">
+                            <label for="directors_name" class="text-capitalize fs-9 form-label">Directors Name</label>
+                            <input type="text" name="directors_name" value="{{ old('directors_name', isset($settings) ? $settings->directors_name : '') }}" id="directors_name" placeholder="Directors name"
+                                class="form-control form-control-sm" required/>
+                            @error('directors_name')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+                         <!-- principal name  -->
+                         <div class="my-1 col-12 col-md-4 text-start">
+                            <label for="principal_name" class="text-capitalize fs-9 form-label">Principal Name</label>
+                            <input type="text" name="principal_name" value="{{ old('principal_name', isset($settings) ? $settings->principal_name : '') }}" id="principal_name" placeholder="principal name"
+                                class="form-control form-control-sm" required/>
+                            @error('principal_name')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+                        </div>
+
                         <div class="my-1 col-12 col-md-4 text-start"></div>
                         <!-- Residential address  -->
                         <div class="my-1 col-12 text-start">
-                            <label for="ResidentialAddress" class="text-capitalize fs-9 form-label">Residential
-                                Address</label>
-                            <input type="text" id="ResidentialAddress" placeholder="Residential Address"
-                                class="form-control form-control-sm" />
+                            <label for="address" class="text-capitalize fs-9 form-label">Address</label>
+                            <input type="text" name="address" id="address" placeholder="Residential Address"
+                                class="form-control form-control-sm" value="{{ old('address', isset($settings) ? $settings->address : '') }}" required />
+                            @error('address')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
-                        <!-- local government of origin  -->
-                        <div class="my-1 col-12 col-md-4 text-start">
-                            <label for="LocalGovernmentofOrigin" class="text-capitalize fs-9 form-label">Local
-                                Government of Origin</label>
-                            <input type="text" id="LocalGovernmentofOrigin"
-                                placeholder="Local Government of Origin" class="form-control form-control-sm" />
-                        </div>
-                        <!-- religion  -->
-                        <div class="my-1 col-12 col-md-4 text-start">
-                            <label for="Religion" class="text-capitalize fs-9 form-label">Religion</label>
-                            <input type="text" id="Religion" placeholder="Religion"
-                                class="form-control form-control-sm" />
-                        </div>
-                        <!-- Nationality -->
-                        <div class="my-1 col-12 col-md-4 text-start">
-                            <label for="Nationality" class="text-capitalize fs-9 form-label">Nationality</label>
-                            <input type="text" id="Nationality" placeholder="Nationality"
-                                class="form-control form-control-sm" required/>
-                        </div>
-                        <!-- last class passed  -->
-                        <div class="my-1 col-12 col-md-4 text-start">
-                            <label for="LastClassPassed" class="text-capitalize fs-9 form-label">Last Class
-                                Passed</label>
-                            <input type="text" id="LastClassPassed" placeholder="Last Class Passed"
-                                class="form-control form-control-sm" required/>
-                        </div>
-                        <!-- class currently applying for  -->
-                        <div class="my-1 col-12 col-md-4 text-start">
-                            <label for="ClassCurrentlyApplyingFor" class="text-capitalize fs-9 form-label">Class Currently Applying For</label>
-                            <select name="class_id" id="ClassCurrentlyApplyingFor" class="form-control form-control-sm" required="">
-                                <option value="">Select a class</option>
-                                <option value="1">
-                                    SS 1
-                                </option>
-                                <option value="2">
-                                    SS 2
-                                </option>
-                                <option value="3">
-                                    JSS 3
-                                </option>
 
-                            </select>
-                        </div>
-                        <h3 class="fs-6 pt-5 fw-bold">Health Information</h3>
-                        <div class="my-1 col-12 d-flex gap-4 text-start">
-                            <div class="fs-7 pe-5" >Do your ward behave abnormal at times
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="abnormal" id="yesabnormal">
-                                <label class="form-check-label fs-9" for="yesabnormal">
-                                    Yes
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="abnormal" id="noabnormal"
-                                    checked>
-                                <label class="form-check-label fs-9" for="noabnormal">
-                                    No
-                                </label>
-                            </div>
 
-                        </div>
-                        <div class="my-1 col-12 text-start">
-                            <label for="AbnormalExplanation" class="text-capitalize fs-7 form-label">If yes
-                                please explain</label>
-                            <input type="text" id="AbnormalExplanation" placeholder=""
-                                class="form-control form-control-sm" />
-                        </div>
-                        <!-- childs general health  -->
-                        <div class="my-1 col-12 text-start">
-                            <label for="HealthCondition" class="text-capitalize fs-7 form-label">What is
-                                your childs general health condition?</label>
-                            <input type="text" id="HealthCondition" placeholder=""
-                                class="form-control form-control-sm" />
-                        </div>
-                        <h3 class="fs-6 fw-bold pt-2">Parents Details</h3>
-                        <div class="my-1 col-12 text-start">
-                            <label for="ParentsName" class="text-capitalize fs-9 form-label">Parents
-                                Name</label>
-                            <input type="text" id="ParentsName" placeholder="Parents Name"
-                                class="form-control form-control-sm"  />
-                        </div>
-                        <div class="my-1 col-12 text-start">
-                            <label for="ParentsAddress" class="text-capitalize fs-9 form-label">Parents
-                                Address</label>
-                            <input type="text" id="ParentsAddress" placeholder="Parents Address"
-                                class="form-control form-control-sm"  />
-                        </div>
-                        <div class="my-1 col-12 text-start">
-                            <label for="Occupation" class="text-capitalize fs-9 form-label">Occupation</label>
-                            <input type="text" id="Occupation" placeholder="Occupation"
-                                class="form-control form-control-sm" />
-                        </div>
-                        <div class="my-1 col-12 text-start">
-                            <label for="Fathersphone" class="text-capitalize fs-9 form-label">Fathers
-                                Phone</label>
-                            <input type="tel" id="Fathersphone" name="Fathersphone" placeholder="Fathers number"
-                                class="form-control form-control-sm" />
-                        </div>
-                        <div class="my-1 col-12 text-start">
-                            <label for="Mothersphone" class="text-capitalize fs-9 form-label">Mothers
-                                Phone</label>
-                            <input type="tel" id="Mothersphone" name="Mothersphone" placeholder="Mothers number"
-                                class="form-control form-control-sm" />
-                        </div>
-                        <h3 class="fw-bold fs-6 pt-4">Create Username & Password</h3>
+                        <h3 class="fw-bold fs-6 pt-4">Update Username & Password(Optional)</h3>
                         <div class="my-1 col-12 text-start">
                             <label for="Username" class="text-capitalize fs-9 form-label">Username</label>
-                            <input type="text" id="Username" placeholder="Enter Username"
+                            <input type="text" name="username" id="Username" value="{{ $username }}" placeholder="Enter Username"
                                 class="form-control form-control-sm" required/>
+                            @error('username')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="my-1 col-12 text-start">
                             <label for="Password" class="text-capitalize fs-9 form-label">Create
-                                Password/ Change Password</label>
-                            <input type="password" id="Password" placeholder="Enter Password"
-                                class="form-control form-control-sm" required/>
+                                new Password(Optional)</label>
+                            <input type="password" name="password" id="Password" placeholder="Enter Password"
+                                class="form-control form-control-sm @error('password') is-invalid @enderror"/>
+                            @error('password')
+                                <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
                         <div class="my-1 col-12 text-start">
                             <label for="confirmPassword" class="text-capitalize fs-9 form-label">Confirm
                                 Password</label>
-                            <input type="password" id="confirmPassword" placeholder="Confirm Password"
-                                class="form-control form-control-sm" required/>
+                            <input type="password" name="password_confirmation" id="confirmPassword" placeholder="Confirm Password"
+                                class="form-control form-control-sm"/>
                         </div>
 
-                        <button type="submit" class="btn my-4 btn-secondary text-capitalize">Submit</button>
+                        <button type="submit" class="btn my-4 btn-secondary text-capitalize">Update Settings</button>
                     </div>
                 </form>
             </div>

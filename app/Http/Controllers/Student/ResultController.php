@@ -9,6 +9,7 @@ use App\Models\Score;
 use Illuminate\Http\Request;
 use App\Models\ResultContent;
 use App\Http\Controllers\Controller;
+use App\Models\Settings;
 use App\Models\TeacherComment;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,6 +24,7 @@ class ResultController extends Controller
 
 
         $data['title'] = "View Result Sheet";
+        $data['settings'] = Settings::find(1);
         $data['studentId'] = $studentId;
         $data['classId'] = $studentClass;
         $data['currentTermSession'] = $currentTermSession;
@@ -97,14 +99,36 @@ class ResultController extends Controller
 
         ])->findOrFail($request->student_id);
 
+        // 👇 ADD THIS CHECK HERE -- as important as callback if error exist:
+        if ($student->scores->isEmpty() ||
+        $student->scores->first()->session_id != $request->session_id ||
+        $student->scores->first()->term_id != $request->term_id) {
 
-        $numInClass = ResultContent::find(1)?->number_in_class ?? 0;
-        $nextTermStart = ResultContent::find(1)?->term_begins ?? 'Contact Principal';
-        $directorName = ResultContent::find(1)?->directors_name ?? 'N/A';
-        
+            return redirect()->back()->with('error', 'Invalid session or term for the selected student.');
+        }
+
+        $getRCD = ResultContent::find(1);
+
+        // Check if class_id from scores matches class_id in ResultContent table
+        if (!$getRCD || $getRCD->class_id !== optional($student->scores->first())->class_id) {
+            return redirect()->back()->with('error', 'Mismatch in class information.');
+        }
+        // If match, assign number_in_class
+        $numInClass = $getRCD->number_in_class ?? 0;
+
+
+        $schoolOpens = Settings::find(1)?->school_open ?? 0;
+        $termBegin = Settings::find(1)?->term_begins ?? 'N/A';
+        $termEnd = Settings::find(1)?->term_ends ?? 'N/A';
+        $nextTermResums = Settings::find(1)?->next_term_resumption_date ?? 'N/A';
+        $directorName = Settings::find(1)?->directors_name ?? 'N/A';
+        $principalSignature = Settings::find(1)?->principal_signature ?? 'SIGNED';
+
+
         $teacherName = optional($student->scores->first()->teacher) ?? 'N/A';
 
         $currentTermSession = Term::with('session')->where('status', '1')->first();
+
 
         // Score calculation
         $scoreBreakdown = [];
@@ -185,10 +209,14 @@ class ResultController extends Controller
             'scoreBreakdown' => $scoreBreakdown,
             'termTotal' => $termTotal,
             'termAverage' => $termAverage,
-            'nextTermStart' => $nextTermStart,
             'teacherName' => $teacherName,
             'position' => $positionFormatted,
             'directorName' => $directorName,
+            'schoolOpens' => $schoolOpens,
+            'termBegin' => $termBegin,
+            'termEnd' => $termEnd,
+            'nextTermResums' => $nextTermResums,
+            'principalSignature' => $principalSignature,
         ];
 
         return view('dashboards.student.result-view', $data);

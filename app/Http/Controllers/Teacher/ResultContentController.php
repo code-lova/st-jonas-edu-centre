@@ -6,6 +6,7 @@ use App\Models\Classes;
 use Illuminate\Http\Request;
 use App\Models\ResultContent;
 use App\Http\Controllers\Controller;
+use App\Models\Settings;
 use App\Models\Term;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -29,7 +30,8 @@ class ResultContentController extends Controller
         }
 
         $data['title'] = "Result Content";
-        $data['settings'] = ResultContent::find(1);
+        $data['settings'] = Settings::find(1);
+        $data['resultContent'] = ResultContent::find(1);
         $data['auth'] = $teacher;
         $data['classTeacherClass'] = $classTeacherClass;
         $data['isClassTeacher'] = $isClassTeacher;

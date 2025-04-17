@@ -23,17 +23,6 @@ website name --}}
                 <div class="fs-6 fw-bold text-blue align-self-center ">{{ $title }}</div>
             </div>
             <div class="bg-light vh-100 text-blue rounded">
-                @if ($currentTermSession && $currentTermSession->session)
-                    <div class="text-start px-2 py-5">
-                        <div class="fs-6 fw-semibold">SUBJECT: <span class="fw-bolder">{{ $subject->subject_name }}</span>, SESSION: {{ $session->name }}, TERM: {{ $term->name }}</div>
-                        <div class="fs-7">Enter/Modify Scores for Students in this class and click anywhere to save changes
-                        </div>
-                    </div>
-                @else
-                    <div class="alert alert-warning">
-                        No active term or session is currently set. Please ensure at least one term is created and activated by admin.
-                    </div>
-                @endif
 
                 <!-- Student detals for scoresx input -->
                 <div class="d-grid p-0 gap-4" id="scores-container">

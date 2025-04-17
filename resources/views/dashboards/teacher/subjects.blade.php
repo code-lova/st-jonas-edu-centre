@@ -23,16 +23,12 @@ website name --}}
             <div class="fs-6 fw-bold text-blue align-self-center "> {{ $title }}</div>
           </div>
           <div class="bg-light text-blue full-height px-3 rounded">
-            @if ($currentTermSession && $currentTermSession->session)
-                <div class="text-start px-2 py-5">
-                    <div class="fs-6 fw-semibold">SESSION: {{ $session->name }}, TERM: {{ $term->name }}</div>
-                    <div class="fs-7">Select a course to enter/modify scores for students.</div>
-                </div>
-            @else
-                <div class="alert alert-warning">
-                    No active term or session is currently set. Please ensure at least one term is created and activated by admin.
-                </div>
-            @endif
+
+            <div class="text-start px-2 py-5">
+                <div class="fs-6 fw-semibold">SESSION: {{ $session->name }}, TERM: {{ $term->name }}</div>
+                <div class="fs-7">Select a course to enter/modify scores for students.</div>
+            </div>
+
             <div class="d-grid gap-4">
                 @foreach ($assignments as $item)
 

@@ -16,19 +16,19 @@ return new class extends Migration
             $table->string('site_name')->nullable();
             $table->string('title')->nullable();
             $table->longText('site_description')->nullable();
+            $table->longText('keywords')->nullable();
             $table->string('email')->nullable();
             $table->string('mobile')->nullable();
             $table->longText('address')->nullable();
             $table->string('directors_name')->nullable();
             $table->string('principal_name')->nullable();
             $table->string('principal_signature')->nullable();
-            $table->date('school_open')->nullable();
+            $table->string('school_open')->nullable();
+            $table->date('next_term_resumption_date')->nullable();
             $table->date('term_ends')->nullable();
             $table->date('term_begins')->nullable();
             $table->string('site_logo')->nullable();
-            $table->tinyInteger('open_result')->nullable();
-            $table->string('username')->nullable();
-            $table->string('password')->nullable();
+            $table->tinyInteger('open_result')->default('0');
             $table->timestamps();
         });
     }
