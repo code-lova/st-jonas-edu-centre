@@ -7,7 +7,7 @@ website name --}}
 
 @section('content')
 
-    <p>This is faq page but loading</p>
+    <p>This is faq page but loading here</p>
 
 
 @endsection

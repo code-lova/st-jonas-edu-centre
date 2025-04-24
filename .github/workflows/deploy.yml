@@ -37,18 +37,18 @@ jobs:
       env:
         SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         SOURCE: "."
-        REMOTE_HOST: ${{ secrets.VPS_HOST }}
-        REMOTE_USER: ${{ secrets.VPS_USER }}
-        REMOTE_PORT: ${{ secrets.VPS_PORT }}
+        REMOTE_HOST: 145.223.89.160
+        REMOTE_USER: u716303331
+        REMOTE_PORT: 65002
         TARGET: "/home/u716303331/domains/stjonaseducentre.com/laravel"
 
     - name: Run Remote/Artisan Commands
       uses: appleboy/ssh-action@v0.1.6
       with:
-        host: ${{ secrets.VPS_HOST }}
-        username: ${{ secrets.VPS_USER }}
+        host: 145.223.89.160
+        username: u716303331
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: ${{ secrets.VPS_PORT }}
+        port: 65002
         script: |
           cd /home/u716303331/domains/stjonaseducentre.com/laravel
           php artisan migrate --force
