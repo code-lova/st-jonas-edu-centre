@@ -39,9 +39,8 @@ jobs:
         SOURCE: "."
         REMOTE_HOST: ${{ secrets.VPS_HOST }}
         REMOTE_USER: ${{ secrets.VPS_USER }}
+        REMOTE_PORT: "65002"
         TARGET: "/home/u716303331/domains/stjonaseducentre.com/laravel"
-      with:
-        ssh_options: "-p 65002"
 
     - name: Run Remote/Artisan Commands
       uses: appleboy/ssh-action@v0.1.6
