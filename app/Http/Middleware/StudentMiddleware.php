@@ -22,7 +22,7 @@ class StudentMiddleware
             } else{
                // Redirect users based on their role
                if (Auth::user()->role === 'admin') {
-                return redirect('/admin/dashboard')->with('error', 'Access Denied: You are not a student');
+                return $next($request);
             } elseif (Auth::user()->role === 'teacher') {
                 return redirect('/teacher/dashboard')->with('error', 'Access Denied: You are not a student');
             }

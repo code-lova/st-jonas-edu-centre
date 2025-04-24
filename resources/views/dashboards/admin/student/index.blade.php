@@ -45,8 +45,23 @@ website name --}}
                             <td>{{ $val->currentClassApplying->class_name }}</td>
                             <td>
                                 <a href="{{ url('admin/student-detail/'.$val->id) }}" class="btn btn-sm btn-info">View</a>
-                                <a href="" class="btn btn-sm btn-secondary">View Results</a>
+                                @if(!$currentTermSession || !$currentTermSession->session)
+                                    <a href="#" class="btn btn-sm btn-secondary">Result Not-set</a>
+                                @else
+                                    <form action="{{ route('view.result') }}" method="POST" target="_blank" class="d-inline">
+                                        @csrf
 
+                                        <input type="hidden" name="student_id" value="{{ $val->id }}">
+                                        <input type="hidden" name="class_id" value="{{ $val->currentClassApplying->id }}" required>
+                                        <input type="hidden" name="session_id" value="{{ $currentTermSession->session->id }}" required>
+                                        <input type="hidden" name="term_id" value="{{ $currentTermSession->id }}" required>
+                                        @if ($settings && $settings->open_result == 0)
+                                            <a href="#" class="btn btn-sm btn-secondary">Result Not-set</a>
+                                        @else
+                                            <button type="submit" class="btn btn-sm btn-secondary">View Results</button>
+                                        @endif
+                                    </form>
+                                @endif
                                 <button onclick="confirmDelete({{ $val->id }})" class="btn btn-sm btn-danger">Delete</button>
                                 <form id="delete-form-{{ $val->id }}" action="{{ route('student.delete', $val->id) }}" method="POST" style="display: none;">
                                     @csrf

@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
                 'firstname' => 'Super',
                 'middlename' => 'Administartor',
                 'lastname' => 'User',
-                'username' => 'admin_user99',
+                'username' => 'admin_user990',
                 'role' => 'admin',
                 'sex' => 'Male',
                 'email' => 'admin@gmail.com',

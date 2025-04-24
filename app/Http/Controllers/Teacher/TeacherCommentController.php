@@ -36,6 +36,10 @@ class TeacherCommentController extends Controller
         }
         $currentTermSession = Term::with('session')->where('status', '1')->first();
 
+        if (!$currentTermSession || !$currentTermSession->session) {
+            return redirect()->back()->with('error', 'Current Term or Session is not set by Admin.');
+        }
+
         $data['title'] = "Comment Dashboard";
         $data['sessions'] = Session::all();
         $data['terms'] = Term::all();

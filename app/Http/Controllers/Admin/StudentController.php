@@ -13,12 +13,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
+use App\Models\Settings;
+use App\Models\Term;
 
 class StudentController extends Controller
 {
 
     public function index(){
+        $currentTermSession = Term::with('session')->where('status', '1')->first();
         $data['title'] = "List of all Student";
+        $data['currentTermSession'] = $currentTermSession;
+        $data['settings'] = Settings::find(1);
         $data['students'] = User::where('role', 'student')->latest()->get();
         return view('dashboards.admin.student.index', $data);
     }

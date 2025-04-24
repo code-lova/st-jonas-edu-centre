@@ -99,7 +99,7 @@ class ResultController extends Controller
 
         ])->findOrFail($request->student_id);
 
-        // 👇 ADD THIS CHECK HERE -- as important as callback if error exist:
+        // 👇 ADD THIS CHECK -- as important as callback if error exist:
         if ($student->scores->isEmpty() ||
         $student->scores->first()->session_id != $request->session_id ||
         $student->scores->first()->term_id != $request->term_id) {
