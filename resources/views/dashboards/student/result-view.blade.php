@@ -86,8 +86,8 @@ website name --}}
             <div class="remark-content m-2 ">
                 <p id="nextTermBegin">Next Term Begins: {{ \Carbon\Carbon::parse($nextTermResums)->translatedFormat('D, d M Y') }}</p>
                 <p id="classTeacherName">Class Teacher's Name: {{ $teacherName->firstname }} {{ $teacherName->middlename ?? '' }} {{ $teacherName->lastname }} </p>
-                <p id="classTecherRemark">Class Teacher's Remark: {{ optional($student->teacherComment->first())->comment ?? 'N/A' }}.</p>
-                <p id="principalRemark">Principal's Remark: {{ optional($student->comments->first())->comment ?? 'N/A' }}</p>
+                <p id="classTecherRemark">Class Teacher's Remark: {{ $teacherComment }}.</p>
+                <p id="principalRemark">Principal's Remark: {{ $principalComment }}</p>
                 <p id="directorName">Director's Name: {{ $directorName }}</p>
             </div>
 

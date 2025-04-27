@@ -129,6 +129,9 @@ class ResultController extends Controller
 
         $currentTermSession = Term::with('session')->where('status', '1')->first();
 
+        $teacherComment = optional($student->teacherComment->first())->comment ?? 'N/A';
+        $principalComment = optional($student->comments->first())->comment ?? 'N/A';
+
 
         // Score calculation
         $scoreBreakdown = [];
@@ -217,6 +220,9 @@ class ResultController extends Controller
             'termEnd' => $termEnd,
             'nextTermResums' => $nextTermResums,
             'principalSignature' => $principalSignature,
+
+            'teacherComment' => $teacherComment,
+            'principalComment' => $principalComment,
         ];
 
         return view('dashboards.student.result-view', $data);
