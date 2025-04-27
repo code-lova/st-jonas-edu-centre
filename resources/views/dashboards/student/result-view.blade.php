@@ -31,7 +31,7 @@ website name --}}
             <div class="col-md-3 col-12 d-flex flex-column align-items-start justify-content-center border-1">
                 <p class=" text-center  text-capitalize" id="studentClass">class: {{ $student->currentClassApplying->class_name }}</p>
                 <p class=" text-center  text-capitalize" id="term">Term: {{ $termSession->name }}</p>
-                <p class=" text-center  text-capitalize" id="timesPresent">Times persent: {{ $student->attendance->first()->times_present ?? 0 }}</p>
+                <p class=" text-center  text-capitalize" id="timesPresent">Times persent: {{optional($student->attendance->first())->times_present ?? 0 }}</p>
             </div>
             <div class="col-md-3 col-12 d-flex flex-column align-items-start justify-content-center border-1">
                 <p class=" text-center  text-capitalize" id="termEnds">Term ends: {{ \Carbon\Carbon::parse($termEnd)->translatedFormat('D, d M Y') }}</p>
@@ -86,8 +86,8 @@ website name --}}
             <div class="remark-content m-2 ">
                 <p id="nextTermBegin">Next Term Begins: {{ \Carbon\Carbon::parse($nextTermResums)->translatedFormat('D, d M Y') }}</p>
                 <p id="classTeacherName">Class Teacher's Name: {{ $teacherName->firstname }} {{ $teacherName->middlename ?? '' }} {{ $teacherName->lastname }} </p>
-                <p id="classTecherRemark">Class Teacher's Remark: {{ $student->teacherComment->first()->comment ?? 'N/A' }}.</p>
-                <p id="principalRemark">Principal's Remark: {{ $student->comments->first()->comment ?? 'N/A' }}</p>
+                <p id="classTecherRemark">Class Teacher's Remark: {{ optional($student->teacherComment->first())->comment ?? 'N/A' }}.</p>
+                <p id="principalRemark">Principal's Remark: {{ optional($student->comments->first())->comment ?? 'N/A' }}</p>
                 <p id="directorName">Director's Name: {{ $directorName }}</p>
             </div>
 
