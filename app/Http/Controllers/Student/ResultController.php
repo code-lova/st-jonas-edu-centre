@@ -83,7 +83,8 @@ class ResultController extends Controller
                 'session_id' => $request->session_id,
                 'term_id' => $request->term_id,
                 'class_id' => $request->class_id,
-            ]),
+            ])
+            ->limit(1),
             'attendance' => fn($q) => $q->where([
                 'session_id' => $request->session_id,
                 'term_id' => $request->term_id,
@@ -129,8 +130,8 @@ class ResultController extends Controller
 
         $currentTermSession = Term::with('session')->where('status', '1')->first();
 
-        $teacherComment = optional($student->teacherComment->first())->comment ?? 'N/A';
-        $principalComment = optional($student->comments->first())->comment ?? 'N/A';
+        $teacherComment = optional($student->teacherComment?->first())->comment ?? 'N/A';
+        $principalComment = $student->comments->comment ?? 'N/A';
 
 
         // Score calculation
