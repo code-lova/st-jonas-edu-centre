@@ -31,7 +31,7 @@ website name --}}
             <div class="col-md-3 col-12 d-flex flex-column align-items-start justify-content-center border-1">
                 <p class=" text-center  text-capitalize" id="studentClass">class: {{ $student->currentClassApplying->class_name }}</p>
                 <p class=" text-center  text-capitalize" id="term">Term: {{ $termSession->name }}</p>
-                <p class=" text-center  text-capitalize" id="timesPresent">Times persent: {{optional($student->attendance->first())->times_present ?? 0 }}</p>
+                <p class=" text-center  text-capitalize" id="timesPresent">Times persent: {{ $numberOfTimesPresent }}</p>
             </div>
             <div class="col-md-3 col-12 d-flex flex-column align-items-start justify-content-center border-1">
                 <p class=" text-center  text-capitalize" id="termEnds">Term ends: {{ \Carbon\Carbon::parse($termEnd)->translatedFormat('D, d M Y') }}</p>

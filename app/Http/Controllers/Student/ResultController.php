@@ -125,13 +125,14 @@ class ResultController extends Controller
         $directorName = Settings::find(1)?->directors_name ?? 'N/A';
         $principalSignature = Settings::find(1)?->principal_signature ?? 'SIGNED';
 
-
         $teacherName = optional($student->scores->first()->teacher) ?? 'N/A';
 
         $currentTermSession = Term::with('session')->where('status', '1')->first();
 
         $teacherComment = optional($student->teacherComment?->first())->comment ?? 'N/A';
         $principalComment = $student->comments->comment ?? 'N/A';
+
+        $numberOfTimesPresent = optional($student->attendance?->first())->times_present ?? 0;
 
 
         // Score calculation
@@ -224,6 +225,7 @@ class ResultController extends Controller
 
             'teacherComment' => $teacherComment,
             'principalComment' => $principalComment,
+            'numberOfTimesPresent' => $numberOfTimesPresent,
         ];
 
         return view('dashboards.student.result-view', $data);
