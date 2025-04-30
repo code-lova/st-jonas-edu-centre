@@ -86,11 +86,38 @@ website name --}}
                     <button type="submit" class="btn btn-secondary mt-3">Create Comment</button>
                 </form>
             </div>
+            <br>
+            <br>
+            <p style="font-weight: bold; font-size: 18px">Sort Comment by Session/Term</p>
+            <div class="row" style="display: flex; justify-content:center;">
+                <!-- first name  -->
+                <div class="my-1 col-12 col-md-4 text-start">
+                    <label class="pt-4" for="sessionName">Session:</label>
+                    <select id="sessionName" name="session_id" class="form-select" required>
+                        <option value="">Select a Session</option>
+                        @foreach ($sessions as $session)
+                            <option value="{{ $session->id }}">{{ $session->name }} Session</option>
+                        @endforeach
+                    </select>
+                </div>
+                <!-- middle name  -->
+                <div class="my-1 col-12 col-md-4 text-start">
+                    <label class="pt-4" for="sessionName">Term:</label>
+                    <select id="termName" name="term_id" class="form-select" required>
+                        <option value="">Select a Term</option>
+                        @foreach ($terms as $term)
+                            <option value="{{ $term->id }}">{{ $term->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-sm btn-warning my-3" onclick="resetFilters()">Reset Table</button>
+
             <!-- Displayed comment Table -->
             <h2 class="mt-5">Comments List</h2>
-            <div style="margin-bottom: 100px;">
+            <div style="max-height: 400px; overflow-y: auto; margin-bottom: 100px;">
                 <table class="table table-bordered mt-3">
-                    <thead>
+                    <thead class="table-light" style="position: sticky; top: 0; z-index: 1;">
                         <tr>
                             <th>Student</th>
                             <th>Session</th>
@@ -101,7 +128,7 @@ website name --}}
                     </thead>
                     <tbody>
                         @forelse ($comments as $val)
-                            <tr>
+                            <tr data-session-id="{{ $val->session_id }}" data-term-id="{{ $val->term_id }}">
                                 <td>{{ $val->student->firstname }} {{ $val->student->lastname }}
                                     ( {{ $val->student->currentClassApplying->class_name }} )
                                 </td>
@@ -138,6 +165,12 @@ website name --}}
         const classDropdown = document.getElementById("student"); // class dropdown
         const studentDropdown = document.getElementById("student-select");
         const oldUserId = "{{ old('user_id') }}";
+
+        //Sorting functionality - VARABLES
+        const sessionFilter = document.getElementById("sessionName");
+        const termFilter = document.getElementById("termName");
+        const rows = document.querySelectorAll("table tbody tr");
+
 
         function fetchStudentsAndSelectOld(classId) {
             studentDropdown.innerHTML = '<option value="">Loading students...</option>';
@@ -176,7 +209,37 @@ website name --}}
             classDropdown.value = oldClassId;
             fetchStudentsAndSelectOld(oldClassId);
         }
+
+        //SORTING FUNCTION FOR COMMENT TABLE
+        function filterTable() {
+            const sessionId = sessionFilter.value;
+            const termId = termFilter.value;
+
+            rows.forEach(row => {
+                const matchesSession = !sessionId || row.dataset.sessionId === sessionId;
+                const matchesTerm = !termId || row.dataset.termId === termId;
+
+                if (matchesSession && matchesTerm) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        }
+
+        sessionFilter.addEventListener("change", filterTable);
+        termFilter.addEventListener("change", filterTable);
     });
+
+     //FUNCTION TO RESET TABLE TO SEE ALL DATA FROM DATABASE
+    function resetFilters() {
+        document.getElementById("sessionName").value = "";
+        document.getElementById("termName").value = "";
+        document.querySelectorAll("table tbody tr").forEach(row => {
+            row.style.display = "";
+        });
+
+    }
 </script>
 
 
