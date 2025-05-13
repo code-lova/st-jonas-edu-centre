@@ -20,10 +20,26 @@ website name --}}
                 </div>
                 <div class="fs-6 fw-bold text-red align-self-center ">Students List</div>
             </div>
-            <div class="my-1 col-12 col-md-4 text-start">
+            <div class="my-4 col-12 col-md-4 text-start">
                 <input type="text" id="myInput" id="middlename" placeholder="Search for names.."
                     onkeyup="myFunction()" class="form-control form-control-lg" />
             </div>
+
+             <p style="font-weight: bold; font-size: 18px">Sort Student by Class</p>
+            <div class="row" style="display: flex; justify-content:center;">
+                <!-- first name  -->
+                <div class="my-1 col-12 col-md-4 text-start mb-4">
+                    <label class="pt-4" for="classname">Student Classes:</label>
+                    <select id="classname" name="class_id" class="form-select" required>
+                        <option value="">Select a class</option>
+                        @foreach ($classes as $class)
+                            <option value="{{ $class->id }}">{{ $class->class_name }} Class</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-sm btn-warning mb-4" onclick="resetStudentFilters()">Reset Table</button>
+
             <table id="myTable" class="table sortable">
                 <thead>
                     <tr>
@@ -37,7 +53,7 @@ website name --}}
                 </thead>
                 <tbody>
                     @forelse ( $students as $k=>$val )
-                        <tr>
+                        <tr data-class-id="{{ $val->currentClassApplying->id }}">
                             <th scope="row">{{ ++$k }}</th>
                             <td>{{ $val->firstname }}</td>
                             <td>{{ $val->lastname }}</td>
@@ -89,3 +105,31 @@ website name --}}
         }
     }
 </script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const classFilter = document.getElementById("classname");
+        const studentRows = document.querySelectorAll("#myTable tbody tr");
+
+        function filterStudentsByClass() {
+            const selectedClassId = classFilter.value;
+
+            studentRows.forEach(row => {
+                const matchesClass = !selectedClassId || row.dataset.classId === selectedClassId;
+                row.style.display = matchesClass ? "" : "none";
+            });
+        }
+
+        classFilter.addEventListener("change", filterStudentsByClass);
+    });
+
+
+    function resetStudentFilters() {
+        document.getElementById("classname").value = "";
+        document.querySelectorAll("#myTable tbody tr").forEach(row => {
+            row.style.display = "";
+        });
+    }
+</script>
+
+

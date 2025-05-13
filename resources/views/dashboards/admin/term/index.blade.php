@@ -175,7 +175,7 @@ website name --}}
                                     data-end="{{ $val->end_date }}">
                                     Edit
                                 </button>
-                                <button disabled class="btn btn-secondary btn-sm fs-7 delete" data-id="{{ $val->id }}">Delete</button>
+                                <button class="btn btn-secondary btn-sm fs-7 delete" data-id="{{ $val->id }}">Delete</button>
                             </td>
                         </tr>
                     @empty

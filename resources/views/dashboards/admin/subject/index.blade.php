@@ -189,7 +189,7 @@ website name --}}
                                 data-class-id="{{ $val->class_id }}">
                                 Edit
                             </button>
-                            <button disabled class="btn btn-secondary btn-sm fs-7 delete-sc" data-id="{{ $val->id }}">Delete</button>
+                            <button class="btn btn-secondary btn-sm fs-7 delete-sc" data-id="{{ $val->id }}">Delete</button>
                         </td>
                     </tr>
                    @empty
@@ -336,7 +336,7 @@ website name --}}
             button.addEventListener("click", function () {
                 const subjectId = this.getAttribute("data-id");
 
-                if (!confirm("Are you sure you want to delete this class?")) return;
+                if (!confirm("Are you sure you want to delete this subject?")) return;
 
                 fetch(`subject/delete/${subjectId}`, {
                     method: "DELETE",

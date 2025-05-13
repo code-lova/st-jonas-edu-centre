@@ -155,7 +155,7 @@ website name --}}
                             <td>{{ ++$k }}</td>
                             <td>{{ $session->name }}</td>
                             <td>
-                                <button disabled class="btn btn-secondary btn-sm fs-7 delete" data-id="{{ $session->id }}">Delete</button>
+                                <button class="btn btn-secondary btn-sm fs-7 delete" data-id="{{ $session->id }}">Delete</button>
                             </td>
                         </tr>
                     @empty

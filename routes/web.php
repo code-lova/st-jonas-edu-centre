@@ -68,6 +68,9 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function (){
         Route::put('/update-student/{id}', 'updateStudent');
         Route::delete('/delete-student/{id}', 'destroy')->name('student.delete');
 
+        //Route::get('/filter-students-by-class/{classId}','filterByClass');
+
+
 
     });
 

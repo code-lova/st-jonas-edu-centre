@@ -155,7 +155,7 @@ website name --}}
                             <td>{{ $class->class_name }}</td>
                             <td>
                                 <button class="btn btn-secondary btn-sm fs-7 edit-class" data-id="{{ $class->id }}" data-name="{{ $class->class_name }}">Edit</button>
-                                <button disabled class="btn btn-secondary btn-sm fs-7 delete-class" data-id="{{ $class->id }}">Delete</button>
+                                <button class="btn btn-secondary btn-sm fs-7 delete-class" data-id="{{ $class->id }}">Delete</button>
                             </td>
                         </tr>
                     @empty

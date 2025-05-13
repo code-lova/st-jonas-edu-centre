@@ -25,8 +25,19 @@ class StudentController extends Controller
         $data['currentTermSession'] = $currentTermSession;
         $data['settings'] = Settings::find(1);
         $data['students'] = User::where('role', 'student')->latest()->get();
+        $data['classes'] = Classes::all();
         return view('dashboards.admin.student.index', $data);
     }
+
+    // public function filterByClass(int $classId)
+    // {
+    //     $students = User::where('current_class_applying', $classId)
+    //         ->with(['currentClassApplying'])
+    //         ->get();
+
+    //     return response()->json($students);
+    // }
+
 
 
     public function create(){
