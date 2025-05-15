@@ -70,7 +70,7 @@ website name --}}
                                     <div class="col-md-4">
                                         <div class="text-blue px-2 text-uppercase text-start student-score-entry border p-2 rounded">
                                             <div id="student-name" class="pt-2 fs-6">
-                                                {{ $val->firstname }}{{ $val->middlename ?? '' }} {{ $val->lastname }}
+                                                {{ $val->firstname }} {{ $val->middlename ?? '' }} {{ $val->lastname }}
                                             </div>
                                             <div class="fs-7">
                                                 <span class="px-1">|</span><span>{{ $val->sex }}</span>
