@@ -21,7 +21,7 @@ class TermController extends Controller
 
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:30|unique:terms,name',
+            'name' => 'required|string|max:30',
             'start_date' => 'required|date|before_or_equal:end_date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'session_id' => 'integer',
@@ -29,7 +29,6 @@ class TermController extends Controller
             'name.required' => 'The term name is required.',
             'name.string' => 'The term name must be a valid string.',
             'name.max' => 'The term name must not exceed 30 characters.',
-            'name.unique' => 'This term name already exists.',
 
             'start_date.required' => 'The start date is required.',
             'start_date.date' => 'The start date must be a valid date.',
