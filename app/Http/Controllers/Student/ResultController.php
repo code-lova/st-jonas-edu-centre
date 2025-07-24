@@ -110,9 +110,9 @@ class ResultController extends Controller
 
         $getRCD = ResultContent::find(1);
 
-        // Check if class_id from scores matches class_id in ResultContent table
-        if (!$getRCD || $getRCD->class_id !== optional($student->scores->first())->class_id) {
-            return redirect()->back()->with('error', 'Mismatch in class information.');
+        // Check if ResultContent table is empty
+        if (!$getRCD) {
+            return redirect()->back()->with('error', 'Result Content is missing.');
         }
         // If match, assign number_in_class
         $numInClass = $getRCD->number_in_class ?? 0;
