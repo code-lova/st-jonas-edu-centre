@@ -232,19 +232,19 @@ website name --}}
                             <div class="fs-7 pe-5" >Do your ward behave abnormal at times
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="abnormal_behaviour" id="yesabnormal" value="Yes" {{ $user->healthInfo->abnormal_behaviour === 1 ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="abnormal_behaviour" id="yesabnormal" value="Yes" {{ $user->healthInfo && $user->healthInfo->abnormal_behaviour === 1 ? 'checked' : '' }}>
                                 <label class="form-check-label fs-9" for="yesabnormal">Yes</label>
                             </div>
 
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="abnormal_behaviour" id="noabnormal" value="No" {{ $user->healthInfo->abnormal_behaviour === 0 ? 'checked' : '' }}>
+                                <input class="form-check-input" type="radio" name="abnormal_behaviour" id="noabnormal" value="No" {{ $user->healthInfo && $user->healthInfo->abnormal_behaviour === 0 ? 'checked' : '' }}>
                                 <label class="form-check-label fs-9" for="noabnormal">No</label>
                             </div>
                         </div>
                         <div class="my-1 col-12 text-start">
                             <label for="AbnormalExplanation" class="text-capitalize fs-7 form-label">If yes
                                 please explain</label>
-                            <input type="text" id="AbnormalExplanation" name="description"  value="{{ $user->healthInfo->description }}" placeholder=""
+                            <input type="text" id="AbnormalExplanation" name="description"  value="{{ $user->healthInfo ? $user->healthInfo->description : '' }}" placeholder=""
                                 class="form-control form-control-sm @error('description') is-invalid @enderror" />
                             @error('description')
                                 <span class="text-danger">{{ $message }}</span>
@@ -254,7 +254,7 @@ website name --}}
                         <div class="my-1 col-12 text-start">
                             <label for="HealthCondition" class="text-capitalize fs-7 form-label">What is
                                 your childs general health condition?</label>
-                            <input type="text" id="HealthCondition" name="child_general_health_condition"  value="{{ $user->healthInfo->child_general_health_condition }}" placeholder=""
+                            <input type="text" id="HealthCondition" name="child_general_health_condition"  value="{{ $user->healthInfo ? $user->healthInfo->child_general_health_condition : '' }}" placeholder=""
                                 class="form-control form-control-sm @error('child_general_health_condition') is-invalid @enderror" />
                             @error('child_general_health_condition')
                                 <span class="text-danger">{{ $message }}</span>
@@ -264,7 +264,7 @@ website name --}}
                         <div class="my-1 col-12 text-start">
                             <label for="ParentsName" class="text-capitalize fs-9 form-label">Parents
                                 Name</label>
-                            <input type="text" id="ParentsName" name="parent_name"  value="{{ $user->parentInfo->parent_name }}" placeholder="Parents Name"
+                            <input type="text" id="ParentsName" name="parent_name"  value="{{ $user->parentInfo ? $user->parentInfo->parent_name : '' }}" placeholder="Parents Name"
                                 class="form-control form-control-sm @error('parent_name') is-invalid @enderror"  />
                             @error('parent_name')
                                 <span class="text-danger">{{ $message }}</span>
@@ -273,7 +273,7 @@ website name --}}
                         <div class="my-1 col-12 text-start">
                             <label for="ParentsAddress" class="text-capitalize fs-9 form-label">Parents
                                 Address</label>
-                            <input type="text" id="ParentsAddress" name="parent_address"  value="{{ $user->parentInfo->parent_address }}" placeholder="Parents Address"
+                            <input type="text" id="ParentsAddress" name="parent_address"  value="{{ $user->parentInfo ? $user->parentInfo->parent_address : '' }}" placeholder="Parents Address"
                                 class="form-control form-control-sm @error('parent_address') is-invalid @enderror"  />
                             @error('parent_address')
                                 <span class="text-danger">{{ $message }}</span>
@@ -281,7 +281,7 @@ website name --}}
                         </div>
                         <div class="my-1 col-12 text-start">
                             <label for="Occupation" class="text-capitalize fs-9 form-label">Occupation</label>
-                            <input type="text" id="Occupation" name="occupation"  value="{{ $user->parentInfo->occupation }}" placeholder="Occupation"
+                            <input type="text" id="Occupation" name="occupation"  value="{{ $user->parentInfo ? $user->parentInfo->occupation : '' }}" placeholder="Occupation"
                                 class="form-control form-control-sm @error('occupation') is-invalid @enderror" />
                             @error('occupation')
                                 <span class="text-danger">{{ $message }}</span>
@@ -290,7 +290,7 @@ website name --}}
                         <div class="my-1 col-12 text-start">
                             <label for="Fathersphone" class="text-capitalize fs-9 form-label">Fathers
                                 Phone</label>
-                            <input type="tel" id="Fathersphone" name="fathers_phone"  value="{{ $user->parentInfo->fathers_phone }}" placeholder="Fathers number"
+                            <input type="tel" id="Fathersphone" name="fathers_phone"  value="{{ $user->parentInfo ? $user->parentInfo->fathers_phone : '' }}" placeholder="Fathers number"
                                 class="form-control form-control-sm @error('fathers_phone') is-invalid @enderror" />
                             @error('fathers_phone')
                                 <span class="text-danger">{{ $message }}</span>
@@ -299,7 +299,7 @@ website name --}}
                         <div class="my-1 col-12 text-start">
                             <label for="Mothersphone" class="text-capitalize fs-9 form-label">Mothers
                                 Phone</label>
-                            <input type="tel" id="Mothersphone" name="mothers_phone"  value="{{ $user->parentInfo->mothers_phone }}" placeholder="Mothers number"
+                            <input type="tel" id="Mothersphone" name="mothers_phone"  value="{{ $user->parentInfo ? $user->parentInfo->mothers_phone : '' }}" placeholder="Mothers number"
                                 class="form-control form-control-sm @error('mothers_phone') is-invalid @enderror" />
                             @error('mothers_phone')
                                 <span class="text-danger">{{ $message }}</span>

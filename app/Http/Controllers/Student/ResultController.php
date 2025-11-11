@@ -34,18 +34,26 @@ class ResultController extends Controller
 
 
 
-    private function getGradeAndRemark($total) {
-        if ($total >= 80) {
+    private function isKindergartenClass($className) {
+        $kgClasses = ['PRE KG', 'KG 1', 'KG 2'];
+        return in_array(strtoupper(trim($className)), $kgClasses);
+    }
+
+    private function getGradeAndRemark($total, $maxScore = 100) {
+        // Calculate percentage
+        $percentage = ($total / $maxScore) * 100;
+
+        if ($percentage >= 80) {
             return ['grade' => 'A+', 'remark' => 'Excellent'];
-        } elseif ($total >= 70) {
+        } elseif ($percentage >= 70) {
             return ['grade' => 'A', 'remark' => 'Excellent'];
-        } elseif ($total >= 60) {
+        } elseif ($percentage >= 60) {
             return ['grade' => 'B', 'remark' => 'Very Good'];
-        } elseif ($total >= 50) {
+        } elseif ($percentage >= 50) {
             return ['grade' => 'C', 'remark' => 'Good'];
-        } elseif ($total >= 45) {
+        } elseif ($percentage >= 45) {
             return ['grade' => 'D', 'remark' => 'Fair'];
-        } elseif ($total >= 40) {
+        } elseif ($percentage >= 40) {
             return ['grade' => 'E', 'remark' => 'Pass'];
         } else {
             return ['grade' => 'F', 'remark' => 'Fail'];
@@ -97,6 +105,7 @@ class ResultController extends Controller
                 'class_id' => $request->class_id,
             ])
             ->limit(1),
+            'currentClassApplying' // Add this to get class information
 
         ])->findOrFail($request->student_id);
 
@@ -139,11 +148,22 @@ class ResultController extends Controller
         $scoreBreakdown = [];
         $termTotal = 0;
 
+        // Determine the maximum score based on class level
+        $className = $student->currentClassApplying->class_name ?? '';
+        $isKindergarten = $this->isKindergartenClass($className);
+        $maxScorePerSubject = $isKindergarten ? 50 : 100;
+
         foreach ($student->scores as $score) {
             $total = $score->first_test + $score->second_test + $score->exam;
+
+            // For kindergarten classes, cap the total at 50
+            if ($isKindergarten && $total > 50) {
+                $total = 50;
+            }
+
             $termTotal += $total;
 
-            $gradeData = $this->getGradeAndRemark($total);
+            $gradeData = $this->getGradeAndRemark($total, $maxScorePerSubject);
 
             $scoreBreakdown[] = [
                 'subject' => $score->subject?->subject_name ?? 'N/A',
@@ -153,6 +173,7 @@ class ResultController extends Controller
                 'total' => $total,
                 'grade' => $gradeData['grade'],
                 'remark' => $gradeData['remark'],
+                'max_score' => $maxScorePerSubject, // Add this for display purposes
             ];
         }
 
@@ -169,8 +190,15 @@ class ResultController extends Controller
         $studentTotals = [];
 
         foreach ($scores as $studentId => $studentScores) {
-            $total = $studentScores->sum(function ($score) {
-                return $score->first_test + $score->second_test + $score->exam;
+            $total = $studentScores->sum(function ($score) use ($isKindergarten) {
+                $subjectTotal = $score->first_test + $score->second_test + $score->exam;
+
+                // For kindergarten classes, cap each subject at 50
+                if ($isKindergarten && $subjectTotal > 50) {
+                    $subjectTotal = 50;
+                }
+
+                return $subjectTotal;
             });
 
             $studentTotals[] = (object)[
@@ -222,10 +250,12 @@ class ResultController extends Controller
             'termEnd' => $termEnd,
             'nextTermResums' => $nextTermResums,
             'principalSignature' => $principalSignature,
-
             'teacherComment' => $teacherComment,
             'principalComment' => $principalComment,
             'numberOfTimesPresent' => $numberOfTimesPresent,
+            'isKindergarten' => $isKindergarten,
+            'maxScorePerSubject' => $maxScorePerSubject,
+            'className' => $className,
         ];
 
         return view('dashboards.student.result-view', $data);

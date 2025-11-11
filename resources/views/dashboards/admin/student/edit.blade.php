@@ -144,7 +144,9 @@ website name --}}
                                 <span class="px-2">Last Class Passed:</span>
                             </div>
                             <div class="col-8 fs-7 col-md-8">
-                                <span id="lastclasspassed" class="text-capitalize text-blue">{{ $user->lastClassPassed->class_name }}</span>
+                                <span id="lastclasspassed" class="text-capitalize text-blue">
+                                    {{ $user->lastClassPassed ? $user->lastClassPassed->class_name : 'Not Set' }}
+                                </span>
                             </div>
                         </div>
                     </li>
@@ -154,7 +156,9 @@ website name --}}
                                 <span class="px-2">Current Class:</span>
                             </div>
                             <div class="col-8 fs-7 col-md-8">
-                                <span id="previousSchool" class="text-capitalize text-blue">{{ $user->currentClassApplying->class_name }}</span>
+                                <span id="previousSchool" class="text-capitalize text-blue">
+                                    {{ $user->currentClassApplying ? $user->currentClassApplying->class_name : 'Not Set' }}
+                                </span>
                             </div>
                         </div>
                     </li>
@@ -164,7 +168,9 @@ website name --}}
                                 <span class="px-2">Abnormalities:</span>
                             </div>
                             <div class="col-8 fs-7 col-md-8">
-                                <span id="Abnormalities" class="text-capitalize text-blue">{{ $user->healthInfo->abnormal_behaviour ? 'Yes' : 'No' }}</span>
+                                <span id="Abnormalities" class="text-capitalize text-blue">
+                                    {{ $user->healthInfo && $user->healthInfo->abnormal_behaviour ? 'Yes' : 'No' }}
+                                </span>
                             </div>
                         </div>
                     </li>
@@ -174,7 +180,9 @@ website name --}}
                                 <span class="px-2">Health Comment:</span>
                             </div>
                             <div class="col-8 fs-7 col-md-8">
-                                <span id="HealthComment" class="text-capitalize text-blue">{{ $user->healthInfo->description ?? 'N/A' }}</span>
+                                <span id="HealthComment" class="text-capitalize text-blue">
+                                    {{ $user->healthInfo ? $user->healthInfo->description ?? 'N/A' : 'N/A' }}
+                                </span>
                             </div>
                         </div>
                     </li>
@@ -185,7 +193,9 @@ website name --}}
                                 <span class="px-2">Health Condition:</span>
                             </div>
                             <div class="col-8 fs-7 col-md-8">
-                                <span id="HealthCondition" class="text-capitalize text-blue">{{ $user->healthInfo->child_general_health_condition ?? 'N/A' }}</span>
+                                <span id="HealthCondition" class="text-capitalize text-blue">
+                                    {{ $user->healthInfo ? $user->healthInfo->child_general_health_condition ?? 'N/A' : 'N/A' }}
+                                </span>
                             </div>
                         </div>
                     </li>
@@ -195,8 +205,8 @@ website name --}}
                                 <span class="px-2">Parents Phone:</span>
                             </div>
                             <div class="col-8 fs-7 col-md-8">
-                                <a href="tel:+2348165179215" class="text-lowercase text-blue"
-                                    id="ParentsPhone">{{ $user->parentInfo->fathers_phone }}</a>
+                                <a href="tel:{{ $user->parentInfo ? $user->parentInfo->fathers_phone : 'N/A' }}" class="text-lowercase text-blue"
+                                    id="ParentsPhone">{{ $user->parentInfo ? $user->parentInfo->fathers_phone : 'N/A' }}</a>
                             </div>
                         </div>
                     </li>
@@ -206,7 +216,9 @@ website name --}}
                                 <span class="px-2">Parents Address:</span>
                             </div>
                             <div class="col-8 fs-7 col-md-8">
-                                <span id="ParentsAddress" class="text-capitalize text-blue">{{ $user->parentInfo->parent_address }}</span>
+                                <span id="ParentsAddress" class="text-capitalize text-blue">
+                                    {{ $user->parentInfo ? $user->parentInfo->parent_address : 'N/A' }}
+                                </span>
                             </div>
                         </div>
                     </li>
@@ -216,7 +228,9 @@ website name --}}
                                 <span class="px-2">Parents Occupation:</span>
                             </div>
                             <div class="col-8 fs-7 col-md-8">
-                                <span id="ParentsOccupation" class="text-capitalize text-blue">{{ $user->parentInfo->occupation ?? 'N/A' }}</span>
+                                <span id="ParentsOccupation" class="text-capitalize text-blue">
+                                    {{ $user->parentInfo ? ($user->parentInfo->occupation ?? 'N/A') : 'N/A' }}
+                                </span>
                             </div>
                         </div>
                     </li>
@@ -237,8 +251,8 @@ website name --}}
                                 <span class="px-2">Fathers Phone:</span>
                             </div>
                             <div class="col-8 fs-7 col-md-8">
-                                <a href="tel:{{ $user->parentInfo->fathers_phone }}" class="text-capitalize text-blue"
-                                    id="FathersPhone">{{ $user->parentInfo->fathers_phone }}</a>
+                                <a href="tel:{{ $user->parentInfo ? $user->parentInfo->fathers_phone : 'N/A' }}" class="text-capitalize text-blue"
+                                    id="FathersPhone">{{ $user->parentInfo ? $user->parentInfo->fathers_phone : 'N/A' }}</a>
                             </div>
                         </div>
                     </li>
@@ -248,8 +262,8 @@ website name --}}
                                 <span class="px-2">Mothers Phone:</span>
                             </div>
                             <div class="col-8 fs-7 col-md-8">
-                                <a href="tel:{{ $user->parentInfo->mothers_phone ?? "N/A" }}" class="text-capitalize text-blue"
-                                    id="MothersPhone">{{ $user->parentInfo->mothers_phone ?? 'N/A' }}</a>
+                                <a href="tel:{{ $user->parentInfo ? ($user->parentInfo->mothers_phone ?? 'N/A') : 'N/A' }}" class="text-capitalize text-blue"
+                                    id="MothersPhone">{{ $user->parentInfo ? ($user->parentInfo->mothers_phone ?? 'N/A') : 'N/A' }}</a>
                             </div>
                         </div>
                     </li>

@@ -68,6 +68,21 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function (){
         Route::put('/update-student/{id}', 'updateStudent');
         Route::delete('/delete-student/{id}', 'destroy')->name('student.delete');
 
+        // Class promotion routes
+        Route::post('/promote-all-students', 'promoteAllStudents')->name('students.promote.all');
+        Route::post('/rollback-last-promotion', 'rollbackLastPromotion')->name('students.rollback.promotion');
+        Route::post('/demote-student/{id}', 'demoteStudent')->name('student.demote');
+        Route::post('/bulk-move-students', 'bulkMoveStudents')->name('students.bulk.move');
+        Route::delete('/remove-graduating-students', 'removeGraduatingStudents')->name('students.remove.graduating');
+    });
+
+    // Graduated Students routes
+    Route::controller(\App\Http\Controllers\Admin\GraduatedStudentController::class)->group(function() {
+        Route::get('/graduated-students', 'index')->name('graduated-students.index');
+        Route::get('/graduated-students/{id}', 'show')->name('graduated-students.show');
+        Route::get('/graduated-students-export', 'export')->name('graduated-students.export');
+        Route::get('/graduation-stats', 'getStats')->name('graduation.stats');
+
         //Route::get('/filter-students-by-class/{classId}','filterByClass');
 
 
@@ -129,13 +144,6 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function (){
         Route::post('/settings', 'store')->name('settings.store');
 
     });
-
-
-
-
-
-
-
 
 });
 

@@ -119,9 +119,7 @@ website name --}}
                     if (!response.ok) throw new Error('Network response was not ok');
                     return response.json();
                 })
-                .then(result => {
-                    alert(result.message); // Show success message
-                })
+                
                 .catch(error => {
                     alert('Error saving score.');
                     console.error('Error:', error);
