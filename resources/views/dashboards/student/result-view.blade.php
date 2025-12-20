@@ -36,7 +36,7 @@ website name --}}
             <div class="col-md-3 col-12 d-flex flex-column align-items-start justify-content-center border-1">
                 <p class=" text-center  text-capitalize" id="termEnds">Term ends: {{ \Carbon\Carbon::parse($termEnd)->translatedFormat('D, d M Y') }}</p>
                 <p class="   text-capitalize" id="numberInClass">No. in class: {{ $numInClass }}</p>
-                <p class=" text-center  text-capitalize" id="studentPosition">position: {{ $position }}</p>
+                {{-- <p class=" text-center  text-capitalize" id="studentPosition">position: {{ $position }}</p> --}}
             </div>
 
         </div>

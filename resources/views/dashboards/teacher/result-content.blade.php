@@ -47,13 +47,11 @@ website name --}}
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
-                            <!-- Number in Class  -->
+                            <!-- Number in Class (Auto-calculated) -->
                             <div class="my-1 col-12 col-md-4 text-start">
                                 <label for="numberInClass" class="text-capitalize fs-9 form-label">Number in class</label>
-                                <input type="Number" required name="number_in_class" @if($resultContent)value="{{ $resultContent->number_in_class }}" @endif id="number_in_class" placeholder="Numbers in class" class="form-control form-control-sm" />
-                                @error('number_in_class')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
+                                <input type="number" readonly id="number_in_class" value="{{ $studentCount }}" placeholder="Numbers in class" class="form-control form-control-sm bg-light" />
+                                <small class="text-muted">Auto-calculated from enrolled students</small>
                             </div>
                             <!-- Next Term Begin  -->
                             <div class="my-1 col-12 col-md-4 text-start">

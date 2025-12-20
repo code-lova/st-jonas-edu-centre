@@ -133,6 +133,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function (){
     Route::controller(\App\Http\Controllers\Admin\PrincipalCommentController::class)->group(function () {
         Route::get('/comment', 'index')->name('commentlist');
         Route::get('/students-by-class', 'getStudentsByClass')->name('admin.students.by.class');
+        Route::get('/terms-by-session', 'getTermsBySession')->name('admin.terms.by.session');
         Route::post('/comment', 'store')->name('create.comment');
         Route::delete('/delete-comment/{id}', 'destroy');
 

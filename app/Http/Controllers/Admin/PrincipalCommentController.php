@@ -16,7 +16,7 @@ class PrincipalCommentController extends Controller
     public function index(){
         $data['title'] = "Custom comment dashboard";
         $data['sessions'] = Session::all();
-        $data['terms'] = Term::all();
+        $data['terms'] = Term::all(); // Load all terms, will filter by session via AJAX
         $data['classes'] = Classes::all();
         $data['comments'] = PrincipalComment::latest()->get();
         return view('dashboards.admin.comments.index', $data);
@@ -31,6 +31,15 @@ class PrincipalCommentController extends Controller
             ->get(['id', 'firstname', 'lastname']);
 
         return response()->json($students);
+    }
+
+    public function getTermsBySession(Request $request)
+    {
+        $sessionId = $request->session_id;
+
+        $terms = Term::where('session_id', $sessionId)->get(['id', 'name']);
+
+        return response()->json($terms);
     }
 
     public function store(Request $request)

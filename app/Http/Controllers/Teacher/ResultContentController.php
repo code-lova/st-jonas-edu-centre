@@ -23,13 +23,23 @@ class ResultContentController extends Controller
         $currentTermSession = Term::with('session')->where('status', '1')->first();
 
 
+        $studentCount = 0;
+
         if (!is_null($teacher->class_teacher)) {
             // Get the class that the logged in user is assigned a class teacher
             $classTeacherClass = Classes::find($teacher->class_teacher);
             $isClassTeacher = $classTeacherClass !== null;
+
+            // Get actual count of students in this class
+            if ($isClassTeacher) {
+                $studentCount = \App\Models\User::where('role', 'student')
+                    ->where('current_class_applying', $teacher->class_teacher)
+                    ->count();
+            }
         }
 
         $data['title'] = "Result Content";
+        $data['studentCount'] = $studentCount;
         $data['settings'] = Settings::find(1);
         $data['resultContent'] = ResultContent::find(1);
         $data['auth'] = $teacher;
@@ -44,7 +54,6 @@ class ResultContentController extends Controller
     {
         $validator = Validator::make($request->all(),[
             'school_open' => 'required|max:255',
-            'number_in_class' => 'string',
             'term_ends' => 'required|string',
             'term_begins'=>'required',
             'class_teacher_name' => 'required',
@@ -66,7 +75,6 @@ class ResultContentController extends Controller
         if($settings)
         {
             $settings->school_open = $request->school_open;
-            $settings->number_in_class = $request->number_in_class;
             $settings->term_ends = $request->term_ends;
             $settings->term_begins = $request->term_begins;
             $settings->class_teacher_name = $request->class_teacher_name;
@@ -79,7 +87,6 @@ class ResultContentController extends Controller
         {
             $settings = new ResultContent;
             $settings->school_open = $request->school_open;
-            $settings->number_in_class = $request->number_in_class;
             $settings->term_ends = $request->term_ends;
             $settings->term_begins = $request->term_begins;
             $settings->class_teacher_name = $request->class_teacher_name;

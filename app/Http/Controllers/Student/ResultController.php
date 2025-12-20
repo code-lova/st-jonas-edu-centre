@@ -123,8 +123,11 @@ class ResultController extends Controller
         if (!$getRCD) {
             return redirect()->back()->with('error', 'Result Content is missing.');
         }
-        // If match, assign number_in_class
-        $numInClass = $getRCD->number_in_class ?? 0;
+        
+        // Calculate actual number of students in the class
+        $numInClass = User::where('role', 'student')
+            ->where('current_class_applying', $request->class_id)
+            ->count();
 
 
         $schoolOpens = Settings::find(1)?->school_open ?? 0;

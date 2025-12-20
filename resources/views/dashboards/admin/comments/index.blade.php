@@ -46,14 +46,11 @@ website name --}}
                         </select>
                     </div>
 
-                    <!-- Term Select -->
+                    <!-- Term Select (Dynamically loaded based on session) -->
                     <div class="form-group mb-3">
                         <label for="term" class="text-start d-block mb-2">Select Term:</label>
                         <select name="term_id" id="term" class="form-control w-100">
-                            <option value="">Select a term</option>
-                            @foreach($terms as $term)
-                                <option value="{{ $term->id }}" {{ old('term_id') == $term->id ? 'selected' : '' }}>{{ $term->name }}</option>
-                            @endforeach
+                            <option value="">Select a session first</option>
                         </select>
                     </div>
 
@@ -100,14 +97,11 @@ website name --}}
                         @endforeach
                     </select>
                 </div>
-                <!-- middle name  -->
+                <!-- Term Filter (Dynamically loaded based on session) -->
                 <div class="my-1 col-12 col-md-4 text-start">
-                    <label class="pt-4" for="sessionName">Term:</label>
-                    <select id="termName" name="term_id" class="form-select" required>
-                        <option value="">Select a Term</option>
-                        @foreach ($terms as $term)
-                            <option value="{{ $term->id }}">{{ $term->name }}</option>
-                        @endforeach
+                    <label class="pt-4" for="termName">Term:</label>
+                    <select id="termName" name="term_id" class="form-select">
+                        <option value="">Select a Session first</option>
                     </select>
                 </div>
             </div>
@@ -162,21 +156,75 @@ website name --}}
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        const sessionDropdown = document.getElementById("session"); // session dropdown for form
+        const termDropdown = document.getElementById("term"); // term dropdown for form
         const classDropdown = document.getElementById("student"); // class dropdown
         const studentDropdown = document.getElementById("student-select");
         const oldUserId = "{{ old('user_id') }}";
+        const oldTermId = "{{ old('term_id') }}";
+        const oldSessionId = "{{ old('session_id') }}";
 
-        //Sorting functionality - VARABLES
+        //Sorting functionality - VARIABLES
         const sessionFilter = document.getElementById("sessionName");
         const termFilter = document.getElementById("termName");
         const rows = document.querySelectorAll("table tbody tr");
 
+        // Function to fetch terms by session
+        function fetchTermsBySession(sessionId, selectTermId = null) {
+            termDropdown.innerHTML = '<option value="">Loading terms...</option>';
+
+            fetch(`{{ url('admin/terms-by-session') }}?session_id=${sessionId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.length === 0) {
+                        termDropdown.innerHTML = '<option value="">No terms found for this session</option>';
+                    } else {
+                        termDropdown.innerHTML = '<option value="">Select a term</option>';
+                        data.forEach(term => {
+                            const isSelected = (selectTermId && term.id == selectTermId) ? 'selected' : '';
+                            termDropdown.innerHTML += `
+                                <option value="${term.id}" ${isSelected}>${term.name}</option>
+                            `;
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching terms:", error);
+                    termDropdown.innerHTML = '<option value="">Failed to load terms</option>';
+                });
+        }
+
+        // Session change event listener
+        sessionDropdown.addEventListener("change", function () {
+            const sessionId = this.value;
+            if (sessionId) {
+                fetchTermsBySession(sessionId);
+            } else {
+                termDropdown.innerHTML = '<option value="">Select a session first</option>';
+            }
+        });
+
+        // Auto-fetch terms if session was previously selected (on validation error)
+        if (oldSessionId) {
+            sessionDropdown.value = oldSessionId;
+            fetchTermsBySession(oldSessionId, oldTermId);
+        }
 
         function fetchStudentsAndSelectOld(classId) {
             studentDropdown.innerHTML = '<option value="">Loading students...</option>';
 
-            fetch(`students-by-class?class_id=${classId}`)
-                .then(response => response.json())
+            fetch(`{{ url('admin/students-by-class') }}?class_id=${classId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     studentDropdown.innerHTML = '<option value="">Select student</option>';
                     data.forEach(student => {
@@ -210,6 +258,35 @@ website name --}}
             fetchStudentsAndSelectOld(oldClassId);
         }
 
+        // Function to fetch terms for the filter section
+        function fetchTermsForFilter(sessionId) {
+            termFilter.innerHTML = '<option value="">Loading terms...</option>';
+
+            fetch(`{{ url('admin/terms-by-session') }}?session_id=${sessionId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.length === 0) {
+                        termFilter.innerHTML = '<option value="">No terms found</option>';
+                    } else {
+                        termFilter.innerHTML = '<option value="">All Terms</option>';
+                        data.forEach(term => {
+                            termFilter.innerHTML += `<option value="${term.id}">${term.name}</option>`;
+                        });
+                    }
+                    // Trigger filter after loading terms
+                    filterTable();
+                })
+                .catch(error => {
+                    console.error("Error fetching terms for filter:", error);
+                    termFilter.innerHTML = '<option value="">Failed to load terms</option>';
+                });
+        }
+
         //SORTING FUNCTION FOR COMMENT TABLE
         function filterTable() {
             const sessionId = sessionFilter.value;
@@ -227,18 +304,27 @@ website name --}}
             });
         }
 
-        sessionFilter.addEventListener("change", filterTable);
+        // Session filter change - load terms dynamically
+        sessionFilter.addEventListener("change", function() {
+            const sessionId = this.value;
+            if (sessionId) {
+                fetchTermsForFilter(sessionId);
+            } else {
+                termFilter.innerHTML = '<option value="">Select a Session first</option>';
+                filterTable();
+            }
+        });
+
         termFilter.addEventListener("change", filterTable);
     });
 
      //FUNCTION TO RESET TABLE TO SEE ALL DATA FROM DATABASE
     function resetFilters() {
         document.getElementById("sessionName").value = "";
-        document.getElementById("termName").value = "";
+        document.getElementById("termName").innerHTML = '<option value="">Select a Session first</option>';
         document.querySelectorAll("table tbody tr").forEach(row => {
             row.style.display = "";
         });
-
     }
 </script>
 
