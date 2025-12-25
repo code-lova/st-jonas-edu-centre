@@ -25,6 +25,6 @@ class StudentAttendance extends Model
     }
 
     public function teacher(){
-        return $this->belongsTo(User::class, 'student_id');
+        return $this->belongsTo(User::class, 'teacher_id');
     }
 }

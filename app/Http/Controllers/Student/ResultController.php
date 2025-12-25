@@ -123,7 +123,7 @@ class ResultController extends Controller
         if (!$getRCD) {
             return redirect()->back()->with('error', 'Result Content is missing.');
         }
-        
+
         // Calculate actual number of students in the class
         $numInClass = User::where('role', 'student')
             ->where('current_class_applying', $request->class_id)
@@ -137,7 +137,9 @@ class ResultController extends Controller
         $directorName = Settings::find(1)?->directors_name ?? 'N/A';
         $principalSignature = Settings::find(1)?->principal_signature ?? 'SIGNED';
 
-        $teacherName = optional($student->scores->first()->teacher) ?? 'N/A';
+        //$teacherName = optional($student->teacherComment?->first()->teacher) ?? 'N/A';
+
+        $teacherName = $student->teacherComment?->first()?->teacher ?? 'N/A';
 
         $currentTermSession = Term::with('session')->where('status', '1')->first();
 

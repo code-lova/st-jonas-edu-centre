@@ -14,6 +14,10 @@ class TeacherComment extends Model
         return $this->belongsTo(User::class, 'student_id', 'id');
     }
 
+    public function teacher() {
+        return $this->belongsTo(User::class, 'teacher_id', 'id');
+    }
+
     public function class() {
         return $this->belongsTo(Classes::class);
     }

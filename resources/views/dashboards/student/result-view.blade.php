@@ -85,8 +85,8 @@ website name --}}
         <div class="remark d-flex justify-content-between ">
             <div class="remark-content m-2 ">
                 <p id="nextTermBegin">Next Term Begins: {{ \Carbon\Carbon::parse($nextTermResums)->translatedFormat('D, d M Y') }}</p>
-                <p id="classTeacherName">Class Teacher's Name: {{ $teacherName->firstname }} {{ $teacherName->middlename ?? '' }} {{ $teacherName->lastname }} </p>
-                <p id="classTecherRemark">Class Teacher's Remark: {{ $teacherComment }}.</p>
+                <p id="classTeacherName">Class Teacher's Name: {{ $teacherName->firstname ?? '' }} {{ $teacherName->middlename ?? '' }} {{ $teacherName->lastname ?? '' }} </p>
+                <p id="classTecherRemark">Class Teacher's Remark: {{ $teacherComment ?? '' }}.</p>
                 <p id="principalRemark">Principal's Remark: {{ $principalComment }}</p>
                 <p id="directorName">Director's Name: {{ $directorName }}</p>
             </div>
