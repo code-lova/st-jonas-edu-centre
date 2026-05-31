@@ -158,7 +158,7 @@ class ResultController extends Controller
         $isKindergarten = $this->isKindergartenClass($className);
         $maxScorePerSubject = $isKindergarten ? 50 : 100;
 
-        foreach ($student->scores as $score) {
+        foreach ($student->scores->unique('subject_id') as $score) {
             $total = $score->first_test + $score->second_test + $score->exam;
 
             // For kindergarten classes, cap the total at 50
@@ -195,7 +195,7 @@ class ResultController extends Controller
         $studentTotals = [];
 
         foreach ($scores as $studentId => $studentScores) {
-            $total = $studentScores->sum(function ($score) use ($isKindergarten) {
+            $total = $studentScores->unique('subject_id')->sum(function ($score) use ($isKindergarten) {
                 $subjectTotal = $score->first_test + $score->second_test + $score->exam;
 
                 // For kindergarten classes, cap each subject at 50
