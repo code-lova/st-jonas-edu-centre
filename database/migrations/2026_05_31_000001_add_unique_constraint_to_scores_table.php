@@ -9,23 +9,47 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // Remove duplicate score rows, keeping only the latest one per student/class/subject/session/term
-        DB::statement('
-            DELETE s1 FROM scores s1
-            INNER JOIN scores s2
-            WHERE s1.id < s2.id
-              AND s1.student_id  = s2.student_id
-              AND s1.class_id    = s2.class_id
-              AND s1.subject_id  = s2.subject_id
-              AND s1.session_id  = s2.session_id
-              AND s1.term_id     = s2.term_id
-        ');
+        DB::transaction(function () {
+            // Find all groups that have more than one score row for the same student/subject/class/session/term
+            $duplicateGroups = DB::table('scores')
+                ->select('student_id', 'class_id', 'subject_id', 'session_id', 'term_id')
+                ->groupBy('student_id', 'class_id', 'subject_id', 'session_id', 'term_id')
+                ->havingRaw('COUNT(*) > 1')
+                ->get();
 
-        Schema::table('scores', function (Blueprint $table) {
-            $table->unique(
-                ['student_id', 'class_id', 'subject_id', 'session_id', 'term_id'],
-                'scores_unique_per_student_subject'
-            );
+            foreach ($duplicateGroups as $group) {
+                // Keep the row with the latest updated_at, using id as a tiebreaker
+                $keepId = DB::table('scores')
+                    ->where([
+                        'student_id' => $group->student_id,
+                        'class_id'   => $group->class_id,
+                        'subject_id' => $group->subject_id,
+                        'session_id' => $group->session_id,
+                        'term_id'    => $group->term_id,
+                    ])
+                    ->orderByDesc('updated_at')
+                    ->orderByDesc('id')
+                    ->value('id');
+
+                // Delete all other rows in this group
+                DB::table('scores')
+                    ->where([
+                        'student_id' => $group->student_id,
+                        'class_id'   => $group->class_id,
+                        'subject_id' => $group->subject_id,
+                        'session_id' => $group->session_id,
+                        'term_id'    => $group->term_id,
+                    ])
+                    ->where('id', '!=', $keepId)
+                    ->delete();
+            }
+
+            Schema::table('scores', function (Blueprint $table) {
+                $table->unique(
+                    ['student_id', 'class_id', 'subject_id', 'session_id', 'term_id'],
+                    'scores_unique_per_student_subject'
+                );
+            });
         });
     }
 

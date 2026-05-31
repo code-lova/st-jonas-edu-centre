@@ -85,7 +85,7 @@ class ResultController extends Controller
                 'session_id' => $request->session_id,
                 'term_id' => $request->term_id,
                 'class_id' => $request->class_id,
-            ])->with('subject'),
+            ])->orderByDesc('updated_at')->orderByDesc('id')->with('subject'),
 
             'comments' => fn($q) => $q->where([
                 'session_id' => $request->session_id,
@@ -189,6 +189,7 @@ class ResultController extends Controller
         $scores = Score::where('class_id', $request->class_id)
         ->where('term_id', $request->term_id)
         ->where('session_id', $request->session_id)
+        ->orderByDesc('updated_at')->orderByDesc('id')
         ->get()
         ->groupBy('student_id');
 
