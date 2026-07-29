@@ -22,7 +22,7 @@ website name --}}
                                     class="col-12 col-md-6 bg-green-25 fixed text-light rounded-2 blur-10 vh-100 bg-opacity-25 d-flex align-items-center">
                                     <div class="fw-bold p-5 fs-1">
                                         <div class="text-end">
-                                            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                            St. Jonas Educational Center dolor sit amet consectetur adipisicing elit.
                                             Corrupti ullam perspiciatis hic nesciunt neque!
                                         </div>
                                         <div class="py-5 d-flex gap-2 justify-content-center">
