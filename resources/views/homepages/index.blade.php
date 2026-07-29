@@ -22,12 +22,12 @@ website name --}}
                                     class="col-12 col-md-6 bg-green-25 fixed text-light rounded-2 blur-10 vh-100 bg-opacity-25 d-flex align-items-center">
                                     <div class="fw-bold p-5 fs-1">
                                         <div class="text-end">
-                                            St. Jonas Educational Center dolor sit amet consectetur adipisicing elit.
-                                            Corrupti ullam perspiciatis hic nesciunt neque!
+                                            St. Jonas Educational Center — Nurturing Bright Minds for a Brighter
+                                            Future.
                                         </div>
                                         <div class="py-5 d-flex gap-2 justify-content-center">
-                                            <a href="" class="btn btn-primary btn-lg">lorem</a>
-                                            <a href="" class="btn btn-warning btn-lg">lorem</a>
+                                            <a href="" class="btn btn-primary btn-lg">Apply Now</a>
+                                            <a href="" class="btn btn-warning btn-lg">Learn More</a>
                                         </div>
                                     </div>
                                 </div>
@@ -42,8 +42,7 @@ website name --}}
                             <div class="row">
                                 <div class="col-12 index-2 text-center">
                                     <div class="text-light pb-4 fw-bold fs-1">
-                                        Lorem ipsum dolor, sit amet consectetur adipisicing
-                                        elit. Neque, dolores?
+                                        Excellence in Education, Building Leaders of Tomorrow
                                     </div>
                                     <a href="" class="btn btn-primary btn-lg">Learn more</a>
                                 </div>
@@ -59,8 +58,8 @@ website name --}}
                                 <div
                                     class="col-12 bg-dark fixed text-light rounded-2 blur-10 vh-50 bg-opacity-25 d-flex align-items-center">
                                     <div class="fw-bold p-5 fs-4">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                        Corrupti ullam perspiciatis hic nesciunt  eque!
+                                        A Safe, Nurturing Environment Where Every Child Is Inspired to Learn and
+                                        Grow.
                                     </div>
                                 </div>
                             </div>
@@ -90,7 +89,7 @@ website name --}}
                 <div class="col-12 col-md-8 align-items-center py-4 d-flex">
                     <div>
                         <div class="py-2 text-uppercase fs-7">
-                            Lorem, ipsum.
+                            Admissions Open
                         </div>
                         <h3 class="fs-4 fw-semibold">Apply for Admission</h3>
                         <div class="fs-6">
@@ -147,11 +146,9 @@ website name --}}
                 <div class="col-12 col-md-5 text-justify">
                     <div><img src="/assets/images/apply-for-admission2.jpg" alt="Image suppose to be here" srcset="" /></div>
                     <div class="fs-7">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas ut
-                        sequi veniam, voluptas et accusantium dolorum explicabo fugit,
-                        aliquid alias possimus repellat. Ipsam amet labore tempora,
-                        quibusdam necessitatibus earum eum asperiores consectetur
-                        nostrum. Cupiditate non id maiores vero natus consequatur!
+                        Take a closer look at the environment where your child will learn, grow, and
+                        thrive. Our campus features modern classrooms, a nurturing atmosphere, and
+                        dedicated staff committed to bringing out the best in every student.
                     </div>
                     <div class="d-grid">
                         <a href="/gallery/"
