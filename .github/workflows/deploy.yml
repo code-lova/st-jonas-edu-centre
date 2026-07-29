@@ -37,20 +37,20 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SOURCE: "."
-          REMOTE_HOST: 145.223.89.160
-          REMOTE_USER: u716303331
-          REMOTE_PORT: 65002
-          TARGET: "/home/u716303331/domains/stjonaseducentre.com/laravel"
+          REMOTE_HOST: ${{ secrets.VPS_HOST }}
+          REMOTE_USER: ${{ secrets.VPS_USER }}
+          REMOTE_PORT: ${{ secrets.VPS_PORT }}
+          TARGET: "/home/eamxixklav/sntjonaseducentre.com/jonaseducentre"
 
       - name: Run Remote/Artisan Commands
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: 145.223.89.160
-          username: u716303331
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 65002
+          port: ${{ secrets.VPS_PORT }}
           script: |
-            cd /home/u716303331/domains/stjonaseducentre.com/laravel
+            cd /home/eamxixklav/sntjonaseducentre.com/jonaseducentre
 
             # Clear all caches first
             php artisan cache:clear
